@@ -1,0 +1,12 @@
+{
+    "name": "kerr",
+    "version": "0.0.1",
+    "credits": "CNRS/LPSC",
+    "author_names": [
+        "Jérôme ODIER"
+    ],
+    "author_emails": [
+        "jerome.odier@lpsc.in2p3.fr"
+    ],
+    "url": "https://gitlab.in2p3.fr/odier.xyz/kerr/"
+}
