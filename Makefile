@@ -31,7 +31,7 @@ htmlcov:
 
 .PHONY: deploy
 deploy: doc test
-	if twine check dist/* then ; twine upload dist/* ; fi
+	./setup.py sdist && twine check dist/* && twine upload dist/*
 
 ########################################################################################################################
 
