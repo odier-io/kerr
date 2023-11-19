@@ -60,7 +60,7 @@ N_MAX_STEPS = 10_000
 def model(result_dydx, var, a, L, C) -> None:
 
     """
-    System of differential equations in Boyer–Lindquist coordinates for photons:
+    System of differential equations in Boyer–Lindquist coordinates for computing photon geodesics:
 
     .. math::
         \\frac{dr}{dz}=p_r\\times\\frac{\\Delta}{\\Sigma}
@@ -77,7 +77,7 @@ def model(result_dydx, var, a, L, C) -> None:
     .. math::
         \\frac{dp_\\theta}{dz}=\\frac{\\sin\\theta\\cos\\theta}{\\Sigma}(L^2/\\sin^4\\theta-a^2)
 
-    Where:
+    Where :math:`a\\equiv\\frac{J}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L` is the projection of the particle angular momentum along the black hole spin axis, :math:`C` the Carter constant and:
 
     .. math::
         \\Sigma\\equiv r^2+a^2\\cos^2\\theta
@@ -93,6 +93,8 @@ def model(result_dydx, var, a, L, C) -> None:
 
     r = var[0]
     θ = var[1]
+    # ϕ not needed
+    # t not needed
     pr = var[4]
     pθ = var[5]
 
@@ -207,7 +209,7 @@ def rkqs(
     dvdz: np.ndarray,
     z: float,
     h: float,
-    eps: float,
+    accuracy: float,
     scale: np.ndarray,
     aks: np.ndarray,
     tmp: np.ndarray
@@ -219,7 +221,7 @@ def rkqs(
 
     ####################################################################################################################
 
-    err_max = np.max(np.abs(var_err / scale)) / eps
+    err_max = np.max(np.abs(var_err / scale)) / accuracy
 
     ####################################################################################################################
 
@@ -256,8 +258,8 @@ def odeint(
     C: float,
     #
     z_end: float,
-    eps: float,
-    h1: float,
+    accuracy: float,
+    default_step: float,
 ) -> typing.Tuple[np.ndarray, int]:
 
     ####################################################################################################################
@@ -275,8 +277,8 @@ def odeint(
 
     ####################################################################################################################
 
-    z = 0.00000000000000000
-    h = np.sign(z_end) * h1
+    z = 0.000000000000000000000000000
+    h = np.sign(z_end) * default_step
 
     for step in range(N_MAX_STEPS):
 
@@ -284,10 +286,25 @@ def odeint(
 
         scale = np.abs(var) + np.abs(dvdz * h) + TINY
 
-        z, h = rkqs(var_tmp, var_err, var, a, L, C, dvdz, z, h, eps, scale, aks, tmp)
+        z, h = rkqs(var_tmp, var_err, var, a, L, C, dvdz, z, h, accuracy, scale, aks, tmp)
 
         if z >= z_end:
 
             return var, step
+
+########################################################################################################################
+
+# noinspection PyPep8Naming
+def integrate(
+    r: float, θ: float, ϕ: float, t: float, pr: float, pθ: float,
+    a: float, L: float, C: float,
+    z_end: float = -1.0e+7,
+    accuracy: float = +1.0e-5,
+    default_step: float = +1.0e-2
+) -> typing.Tuple[np.ndarray, int]:
+
+    var, step = odeint(np.array([r, θ, ϕ, t, pr, pθ]), a, L, C, z_end, accuracy, default_step)
+
+    return var, step
 
 ########################################################################################################################
