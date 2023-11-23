@@ -16,6 +16,8 @@ TWO_PI = 2.0 * np.pi
 
 ########################################################################################################################
 
+# Cash-Karp Parameters for Embedded Runga-Kutta
+
 B21 = +2.000000000000000e-01
 B31 = +7.500000000000000e-02
 B32 = +2.250000000000000e-01
@@ -31,8 +33,6 @@ B62 = +3.417968750000000e-01
 B63 = +4.159432870370371e-02
 B64 = +4.003454137731481e-01
 B65 = +6.176757812500000e-02
-
-########################################################################################################################
 
 C1 = +9.788359788359788e-02
 C2 = +0.000000000000000e+00
@@ -70,24 +70,24 @@ def model(out_dydx, var, a, L, C) -> None:
     System of differential equations, in Boyer–Lindquist coordinates, for computing photon geodesics:
 
     .. math::
-        \\frac{dr}{dz}=p_r\\times\\frac{\\Delta}{\\Sigma}
+        \\frac{dr}{dz}=p_r\\times\\frac{\\Delta}{\\rho^2}
 
     .. math::
-        \\frac{d\\theta}{dz}=p_\\theta\\times\\frac{1}{\\Sigma}
+        \\frac{d\\theta}{dz}=p_\\theta\\times\\frac{1}{\\rho^2}
 
     .. math::
-        \\frac{d\\phi}{dz}=\\frac{2ar+(\\Sigma-2r)L/\\sin^2\\theta}{\\Sigma\\Delta}
+        \\frac{d\\phi}{dz}=\\frac{2ar+(\\rho^2-2r)L/\\sin^2\\theta}{\\rho^2\\Delta}
 
     .. math::
-        \\frac{dp_r}{dz}=\\frac{(-\\kappa)(r-1)+2r(r^2+a^2)-2aL}{\\Sigma\\Delta}-\\frac{2p_r^2(r-1)}{\\Sigma}
+        \\frac{dp_r}{dz}=\\frac{(-\\kappa)(r-1)+2r(r^2+a^2)-2aL}{\\rho^2\\Delta}-\\frac{2p_r^2(r-1)}{\\rho^2}
 
     .. math::
-        \\frac{dp_\\theta}{dz}=\\frac{\\sin\\theta\\cos\\theta}{\\Sigma}(L^2/\\sin^4\\theta-a^2)
+        \\frac{dp_\\theta}{dz}=\\frac{\\sin\\theta\\cos\\theta}{\\rho^2}\\left[(L/\\sin^2\\theta)^2-a^2\\right]
 
     Where :math:`a\\equiv\\frac{J}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L` is the projection of the particle angular momentum along the black hole spin axis, :math:`C` the Carter constant and:
 
     .. math::
-        \\Sigma\\equiv r^2+a^2\\cos^2\\theta
+        \\rho^2\\equiv r^2+a^2\\cos^2\\theta
 
     .. math::
         \\Delta\\equiv r^2-2r+a^2
@@ -101,16 +101,15 @@ def model(out_dydx, var, a, L, C) -> None:
     r = var[0]
     θ = var[1]
     # ϕ not needed
-    # t not needed
-    pr = var[4]
-    pθ = var[5]
+    pr = var[3]
+    pθ = var[4]
 
-    r2 = r * r
     a2 = a * a
+    r2 = r * r
     L2 = L * L
 
-    twor = 2.0 * r
     twoa = 2.0 * a
+    twor = 2.0 * r
 
     ####################################################################################################################
 
@@ -129,28 +128,24 @@ def model(out_dydx, var, a, L, C) -> None:
 
     ####################################################################################################################
 
-    Σ = r2 + a2 * cos2θ
-
     Δ = r2 - twor + a2
+
+    ρ2 = r2 + a2 * cos2θ
 
     κ = C + L2 + a2
 
     ####################################################################################################################
 
-    ΣΔ = Σ * Δ
-
-    ####################################################################################################################
-
     # drdz
-    out_dydx[0] = pr * (Δ / Σ)
+    out_dydx[0] = pr * (Δ / ρ2)
     # dθdz
-    out_dydx[1] = pθ * (1.0 / Σ)
+    out_dydx[1] = pθ * (1.0 / ρ2)
     # dϕdz
-    out_dydx[2] = (2.0 * a * r + (Σ - twor) * L / sin2θ) / ΣΔ
+    out_dydx[2] = (2.0 * a * r + (ρ2 - twor) * L / sin2θ) / (ρ2 * Δ)
     # dprdz
-    out_dydx[3] = ((-κ) * (r - 1.0) + twor * (r2 + a2) - twoa * L) / ΣΔ - (pr * pr) * (twor - 2.0) / Σ
+    out_dydx[3] = ((-κ) * (r - 1.0) + twor * (r2 + a2) - twoa * L) / (ρ2 * Δ) - (pr * pr) * (twor - 2.0) / ρ2
     # dpθdz
-    out_dydx[4] = (sinθ * cosθ) * (L2 / sin4θ - a2) / Σ
+    out_dydx[4] = (sinθ * cosθ) * (L2 / sin4θ - a2) / ρ2
 
 ########################################################################################################################
 
@@ -293,7 +288,7 @@ def odeint(
 
     ####################################################################################################################
 
-    z = 0.000000000000000000000000000
+    z = 0.000000000000 * 0x0000000000
     h = np.sign(z_end) * default_step
 
     for curr_iter in range(N_MAX_ITERS):
@@ -333,14 +328,14 @@ def wrap(θ: float, ϕ: float) -> typing.Tuple[float, float]:
 
 # noinspection PyPep8Naming
 def integrate(
-    r: float, θ: float, ϕ: float, t: float, pr: float, pθ: float,
+    r: float, θ: float, ϕ: float, pr: float, pθ: float,
     a: float, L: float, C: float,
     z_end: float = -1.0e+7,
     accuracy: float = +1.0e-5,
     default_step: float = +1.0e-2
 ) -> typing.Tuple[np.ndarray, int]:
 
-    var, step = odeint(np.array([r, θ, ϕ, t, pr, pθ], dtype = np.float32), a, L, C, z_end, accuracy, default_step)
+    var, step = odeint(np.array([r, θ, ϕ, pr, pθ], dtype = np.float32), a, L, C, z_end, accuracy, default_step)
 
     var[1], var[2] = wrap(float(var[1]), float(var[2])) # θ and ϕ
 
