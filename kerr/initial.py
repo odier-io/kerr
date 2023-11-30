@@ -1,106 +1,129 @@
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 -*-
 ########################################################################################################################
+
+"""Photon initial conditions."""
+
+########################################################################################################################
+
+import math
+import typing
 
 import numpy as np
 import numba as nb
 
-from kerr.camera import Camera
+from kerr.transformation import obs_to_bh, cartesian_to_boyer_lindquist
 
 ########################################################################################################################
 
-# noinspection PyPep8Naming
-def initial(camera: Camera, θ_obs: np.ndarray, ϕ_obs: np.ndarray):
-
-    return _initial(
-        camera.a,
-        camera.Δ,
-        camera.ρ,
-        camera.α,
-        camera.ϖ,
-        camera.ω,
-        #
-        camera.θ,
-        camera.br,
-        camera.bθ,
-        camera.bϕ,
-        camera.speed,
-        #
-        θ_obs,
-        ϕ_obs
-    )
-
-########################################################################################################################
-
-# noinspection PyPep8Naming, PyRedundantParentheses
-@nb.njit(fastmath = True)
-def _initial(
+# noinspection PyPep8Naming, PyRedundantParentheses, SpellCheckingInspection
+@nb.njit
+def initial(
     a: float,
-    Δ: float,
-    ρ: float,
-    α: float,
-    ϖ: float,
-    ω: float,
-    #
-    θ_cam: float,
-    br_cam: float,
-    bθ_cam: float,
-    bϕ_cam: float,
-    speed_cam,
-    #
-    θ_obs: np.ndarray,
-    ϕ_obs: np.ndarray
-):
-
-    ####################################################################################################################
-    # FIDUCIAL OBSERVER                                                                                                #
-    ####################################################################################################################
-
-    x_obs = np.sin(θ_obs) \
-            * np.cos(ϕ_obs)
-    y_obs = np.sin(θ_obs) \
-            * np.sin(ϕ_obs)
-    z_obs = np.cos(θ_obs)
+    r_obs: float,
+    θ_obs: float,
+    ϕ_obs: float,
+    x: np.ndarray,
+    y: np.ndarray,
+    z: np.ndarray
+) -> typing.Tuple[
+    np.ndarray, np.ndarray, np.ndarray,
+    np.ndarray, np.ndarray, np.ndarray,
+    np.ndarray, np.ndarray, np.ndarray,
+]:
 
     ####################################################################################################################
 
-    n = np.sqrt(1.0 - speed_cam * speed_cam)
+    x_bh, y_bh, z_bh = obs_to_bh(a, r_obs, θ_obs, ϕ_obs, x, y, z)
 
-    d = 1.0 - speed_cam * y_obs
-
-    x_fido = -x_obs * n / d
-    y_fido = -(y_obs - speed_cam) / d
-    z_fido = -z_obs * n / d
+    r_bh, θ_bh, ϕ_bh = cartesian_to_boyer_lindquist(a, x_bh, y_bh, z_bh)
 
     ####################################################################################################################
 
-    k = np.sqrt(1.0 - bθ_cam * bθ_cam)
-
-    r_fido = (+x_fido * bϕ_cam / k) + (y_fido * br_cam) + (z_fido * br_cam * bθ_cam / k)
-    θ_fido = y_fido * bθ_cam - z_fido * k
-    ϕ_fido = (-x_fido * br_cam / k) + (y_fido * bϕ_cam) + (z_fido * bθ_cam * bϕ_cam / k)
-
-    ####################################################################################################################
-    # INITIAL CONDITIONS                                                                                               #                                                                                                             #
-    ####################################################################################################################
-
-    E = 1.0 / (α + ϖ * ω * ϕ_fido)
+    Φ = ϕ_bh - ϕ_obs
 
     ####################################################################################################################
 
-    p_r = r_fido * ρ / (Δ)         # !!! This is p_r renormalized to E to simplify geodesic calculations
-    p_θ = θ_fido * ρ / 1.0         # !!! This is p_θ renormalized to E to simplify geodesic calculations
-    p_ϕ = ϕ_fido * ϖ / 1.0         # !!! This is p_ϕ renormalized to E to simplify geodesic calculations
+    sinθ_obs = math.sin(θ_obs)
+    cosθ_obs = math.cos(θ_obs)
+
+    sinθ_bh = np.sin(θ_bh)
+    cosθ_bh = np.cos(θ_bh)
+
+    sinΦ = np.sin(Φ)
+    cosΦ = np.cos(Φ)
 
     ####################################################################################################################
 
-    L = p_ϕ
+    sin2θ_bh = sinθ_bh * sinθ_bh
+    cos2θ_bh = cosθ_bh * cosθ_bh
 
     ####################################################################################################################
 
-    C = p_ϕ * p_ϕ + np.cos(θ_cam) ** 2 * (L * L / np.sin(θ_cam) ** 2 - a * a)
+    a2 = a * a
+
+    r2_bh = r_bh * r_bh
 
     ####################################################################################################################
 
-    return p_r, p_θ, E, L, C
+    R2 = r2_bh + a2
+
+    R1 = np.sqrt(r2_bh + a2)
+
+    ####################################################################################################################
+    # KERR PARAMETERS                                                                                                  #
+    ####################################################################################################################
+
+    Δ = r2_bh - 2.0 * r_bh + a2
+
+    ρ2 = r2_bh + a2 * cos2θ_bh
+
+    ####################################################################################################################
+    # INITIAL CONDITIONS                                                                                               #
+    ####################################################################################################################
+
+    zdot = -1.0
+
+    rdot_bh = zdot * (-r_bh * R1 * sinθ_bh * sinθ_obs * cosΦ - R2 * cosθ_bh * cosθ_obs) / ρ2
+
+    θdot_bh = zdot * (+r_bh * sinθ_bh * cosθ_obs - R1 * cosθ_bh * sinθ_obs * cosΦ) / ρ2 * (+100.0)
+
+    ϕdot_bh = zdot * (sinθ_obs * sinΦ) / (R1 * sinθ_bh) * (-100.0)
+
+    ####################################################################################################################
+
+    pr_bh = rdot_bh * ρ2 / (Δ)
+    pθ_bh = θdot_bh * ρ2 / 1.0
+
+    ####################################################################################################################
+
+    E = np.sqrt((ρ2 - 2.0 * r_bh) * (rdot_bh * rdot_bh / Δ + θdot_bh * θdot_bh) + Δ * sin2θ_bh * ϕdot_bh * ϕdot_bh)
+
+    L = (ρ2 * Δ * ϕdot_bh - 2.0 * a * r_bh * E) * sin2θ_bh / (ρ2 - 2.0 * r_bh)
+
+    ####################################################################################################################
+
+    pr_bh /= E # For simplifying geodesic calculations
+    pθ_bh /= E # For simplifying geodesic calculations
+    L     /= E # For simplifying geodesic calculations
+
+    ####################################################################################################################
+
+    L2 = L * L
+
+    pθ2_bh = pθ_bh * pθ_bh
+
+    Q = pθ2_bh + (L2 / sin2θ_bh - a2) * cos2θ_bh
+
+    κ = Q + L2 + a2
+
+    ####################################################################################################################
+
+    return (
+        r_bh, θ_bh, ϕ_bh,
+        pr_bh, pθ_bh,
+        #
+        E, L,
+        Q, κ
+    )
 
 ########################################################################################################################
