@@ -1,10 +1,11 @@
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
 ########################################################################################################################
 
 """Coordinate system transformations."""
 
 ########################################################################################################################
 
+import math
 import typing
 
 import numpy as np
@@ -15,9 +16,9 @@ import numba as nb
 @nb.njit
 def obs_to_bh(
     a: float,
-    r_obs: np.ndarray,
-    θ_obs: np.ndarray,
-    ϕ_obs: np.ndarray,
+    r_obs: float,
+    θ_obs: float,
+    ϕ_obs: float,
     x: np.ndarray,
     y: np.ndarray,
     z: np.ndarray
@@ -30,11 +31,11 @@ def obs_to_bh(
     ----------
     a : float
         The black hole spin ∈ ]-1,+1[.
-    r_obs : np.ndarray
+    r_obs : float
         The observer radial distance.
-    θ_obs : np.ndarray
+    θ_obs : float
         The observer polar angle ∈ [0,π].
-    ϕ_obs : np.ndarray
+    ϕ_obs : float
         The observer azimuthal angle ∈ [0,2π].
     x : np.ndarray
         The 1st cartesian coordinate.
@@ -57,11 +58,11 @@ def obs_to_bh(
 
     ####################################################################################################################
 
-    sinθ_obs = np.sin(θ_obs)
-    cosθ_obs = np.cos(θ_obs)
+    sinθ_obs = math.sin(θ_obs)
+    cosθ_obs = math.cos(θ_obs)
 
-    sinϕ_obs = np.sin(ϕ_obs)
-    cosϕ_obs = np.cos(ϕ_obs)
+    sinϕ_obs = math.sin(ϕ_obs)
+    cosϕ_obs = math.cos(ϕ_obs)
 
     ####################################################################################################################
 
@@ -80,7 +81,12 @@ def obs_to_bh(
 ########################################################################################################################
 
 @nb.njit
-def cartesian_to_boyer_lindquist(a: float, x: np.ndarray, y: np.ndarray, z: np.ndarray) -> typing.Tuple[np.ndarray, np.ndarray, np.ndarray]:
+def cartesian_to_boyer_lindquist(
+    a: float,
+    x: np.ndarray,
+    y: np.ndarray,
+    z: np.ndarray
+) -> typing.Tuple[np.ndarray, np.ndarray, np.ndarray]:
 
     """
     Transforms cartesian coordinates into Boyer-Lindquist coordinates.
