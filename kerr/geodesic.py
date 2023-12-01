@@ -63,8 +63,14 @@ N_MAX_ITERS = 10_000
 ########################################################################################################################
 
 # noinspection PyPep8Naming
-@nb.njit(fastmath = True)
-def model(out_dydx, var, a, L, C) -> None:
+@nb.njit
+def geodesic(
+    out_dydx: np.ndarray,
+    y: np.ndarray,
+    a: float,
+    L: float,
+    κ: float
+) -> None:
 
     """
     System of differential equations, in Boyer–Lindquist coordinates, for computing photon geodesics:
@@ -98,11 +104,11 @@ def model(out_dydx, var, a, L, C) -> None:
 
     ####################################################################################################################
 
-    r = var[0]
-    θ = var[1]
-    # ϕ not needed
-    pr = var[3]
-    pθ = var[4]
+    r = y[0]
+    θ = y[1]
+    # = y[2]
+    pr = y[3]
+    pθ = y[4]
 
     a2 = a * a
     r2 = r * r
@@ -121,10 +127,10 @@ def model(out_dydx, var, a, L, C) -> None:
 
     sin4θ = sin2θ * sin2θ
 
-    if sinθ < TINY:
-        sinθ = TINY
-        sin2θ = TINY
-        sin4θ = TINY
+    if sinθ < 1.0e-8:
+        sinθ = 1.0e-8
+        sin2θ = 1.0e-16
+        sin4θ = 1.0e-32
 
     ####################################################################################################################
 
@@ -132,14 +138,12 @@ def model(out_dydx, var, a, L, C) -> None:
 
     ρ2 = r2 + a2 * cos2θ
 
-    κ = C + L2 + a2
-
     ####################################################################################################################
 
     # drdz
     out_dydx[0] = pr * (Δ / ρ2)
     # dθdz
-    out_dydx[1] = pθ * (1.0 / ρ2)
+    out_dydx[1] = pθ * (1 / ρ2)
     # dϕdz
     out_dydx[2] = (2.0 * a * r + (ρ2 - twor) * L / sin2θ) / (ρ2 * Δ)
     # dprdz
@@ -150,88 +154,90 @@ def model(out_dydx, var, a, L, C) -> None:
 ########################################################################################################################
 
 # noinspection PyPep8Naming
-@nb.njit(fastmath = True)
+@nb.njit
 def rkck(
-    out_var: np.ndarray,
-    out_err: np.ndarray,
+    out_y: np.ndarray,
+    out_e: np.ndarray,
     #
-    var: np.ndarray,
+    y: np.ndarray,
     a: float,
     L: float,
-    C: float,
+    κ: float,
     #
     dvdz: np.ndarray,
     h: float,
-    aks: np.ndarray,
+    ak2: np.ndarray,
+    ak3: np.ndarray,
+    ak4: np.ndarray,
+    ak5: np.ndarray,
+    ak6: np.ndarray,
     tmp: np.ndarray
 ) -> None:
 
-    ####################################################################################################################
-
-    ak2 = aks[0]
-    ak3 = aks[1]
-    ak4 = aks[2]
-    ak5 = aks[3]
-    ak6 = aks[4]
+    dim = y.shape[0]
 
     ####################################################################################################################
 
-    for i in range(var.shape[0]):
-        tmp[i] = var[i] + h * (B21 * dvdz[i])
-    model(ak2, tmp, a, L, C)
+    for i in range(dim):
+        tmp[i] = y[i] + h * (B21 * dvdz[i])
+    geodesic(ak2, tmp, a, L, κ)
 
-    for i in range(var.shape[0]):
-        tmp[i] = var[i] + h * (B31 * dvdz[i] + B32 * ak2[i])
-    model(ak3, tmp, a, L, C)
+    for i in range(dim):
+        tmp[i] = y[i] + h * (B31 * dvdz[i] + B32 * ak2[i])
+    geodesic(ak3, tmp, a, L, κ)
 
-    for i in range(var.shape[0]):
-        tmp[i] = var[i] + h * (B41 * dvdz[i] + B42 * ak2[i] + B43 * ak3[i])
-    model(ak4, tmp, a, L, C)
+    for i in range(dim):
+        tmp[i] = y[i] + h * (B41 * dvdz[i] + B42 * ak2[i] + B43 * ak3[i])
+    geodesic(ak4, tmp, a, L, κ)
 
-    for i in range(var.shape[0]):
-        tmp[i] = var[i] + h * (B51 * dvdz[i] + B52 * ak2[i] + B53 * ak3[i] + B54 * ak4[i])
-    model(ak5, tmp, a, L, C)
+    for i in range(dim):
+        tmp[i] = y[i] + h * (B51 * dvdz[i] + B52 * ak2[i] + B53 * ak3[i] + B54 * ak4[i])
+    geodesic(ak5, tmp, a, L, κ)
 
-    for i in range(var.shape[0]):
-        tmp[i] = var[i] + h * (B61 * dvdz[i] + B62 * ak2[i] + B63 * ak3[i] + B64 * ak4[i] + B65 * ak5[i])
-    model(ak6, tmp, a, L, C)
+    for i in range(dim):
+        tmp[i] = y[i] + h * (B61 * dvdz[i] + B62 * ak2[i] + B63 * ak3[i] + B64 * ak4[i] + B65 * ak5[i])
+    geodesic(ak6, tmp, a, L, κ)
 
     ####################################################################################################################
 
-    for i in range(var.shape[0]):
+    for i in range(dim):
 
-        out_var[i] = var[i] + h * (C1 * dvdz[i] + C3 * ak3[i] + C4 * ak4[i] + C6 * ak6[i])
+        out_y[i] = y[i] + h * (C1 * dvdz[i] + C3 * ak3[i] + C4 * ak4[i] + C6 * ak6[i])
 
-        out_err[i] = 0.0000 + h * (D1 * dvdz[i] + D3 * ak3[i] + D4 * ak4[i] + D5 * ak5[i] + D6 * ak6[i])
+        out_e[i] = 0.00 + h * (D1 * dvdz[i] + D3 * ak3[i] + D4 * ak4[i] + D5 * ak5[i] + D6 * ak6[i])
 
 ########################################################################################################################
 
 # noinspection PyPep8Naming
-@nb.njit(fastmath = True)
+@nb.njit
 def rkqs(
-    inout_var: np.ndarray,
+    inout_y: np.ndarray,
     a: float,
     L: float,
-    C: float,
+    κ: float,
     #
     dvdz: np.ndarray,
     z: float,
     h: float,
     accuracy: float,
     scale: np.ndarray,
-    aks: np.ndarray,
-    tmp_int: np.ndarray,
-    tmp_var: np.ndarray,
-    tmp_err: np.ndarray
+    tmp_y: np.ndarray,
+    tmp_e: np.ndarray,
+    ak2: np.ndarray,
+    ak3: np.ndarray,
+    ak4: np.ndarray,
+    ak5: np.ndarray,
+    ak6: np.ndarray,
+    tmp: np.ndarray
 ) -> typing.Tuple[float, float]:
 
     ####################################################################################################################
 
-    rkck(tmp_var, tmp_err, inout_var, a, L, C, dvdz, h, aks, tmp_int)
+    rkck(tmp_y, tmp_e, inout_y, a, L, κ, dvdz, h, ak2, ak3, ak4, ak5, ak6, tmp)
 
     ####################################################################################################################
 
-    err_max = np.max(np.abs(tmp_err / scale)) / accuracy
+    err_max = np.max(np.abs(tmp_e / scale)) / accuracy
 
     ####################################################################################################################
 
@@ -239,19 +245,21 @@ def rkqs(
 
         z += h
 
-        inout_var[:] = tmp_var
+        inout_y[:] = tmp_y
 
-        if err_max < ERROR_THRESHOLD:
+        if err_max > ERROR_THRESHOLD:
 
-            h *= ADAPTIVE
-
+            h = SAFETY * h * pow(err_max, POSITIVE_GROWTH)
         else:
-
-            h *= SAFETY * pow(err_max, POSITIVE_GROWTH)
+            h = ADAPTIVE * h
 
     else:
 
-        h *= min(SAFETY * pow(err_max, POSITIVE_SHRINK), 0.1)
+        h = min(
+            SAFETY * h * pow(err_max, POSITIVE_SHRINK)
+            ,
+            0.1 * h
+        )
 
     ####################################################################################################################
 
@@ -260,12 +268,12 @@ def rkqs(
 ########################################################################################################################
 
 # noinspection PyPep8Naming
-@nb.njit(fastmath = True)
+@nb.njit
 def odeint(
-    inout_var: np.ndarray,
+    inout_y: np.ndarray,
     a: float,
     L: float,
-    C: float,
+    κ: float,
     #
     z_end: float,
     accuracy: float,
@@ -274,42 +282,49 @@ def odeint(
 
     ####################################################################################################################
 
-    dim = inout_var.shape[0]
+    dim = inout_y.shape[0]
 
     ####################################################################################################################
 
-    dvdz = np.zeros(dim)
+    dvdz = np.empty(dim, dtype = np.float64)
 
-    aks = np.zeros((5, dim))
+    tmp_y = np.empty(dim, dtype = np.float64)
+    tmp_e = np.empty(dim, dtype = np.float64)
 
-    tmp_int = np.zeros(dim)
-    tmp_var = np.zeros(dim)
-    tmp_err = np.zeros(dim)
+    ak2 = np.empty(dim, dtype = np.float64)
+    ak3 = np.empty(dim, dtype = np.float64)
+    ak4 = np.empty(dim, dtype = np.float64)
+    ak5 = np.empty(dim, dtype = np.float64)
+    ak6 = np.empty(dim, dtype = np.float64)
+
+    tmp = np.empty(dim, dtype = np.float64)
 
     ####################################################################################################################
 
-    z = 0.000000000000 * 0x0000000000
+    z = 0.000000000000000000000000000
     h = np.sign(z_end) * default_step
+
+    ####################################################################################################################
 
     for curr_iter in range(N_MAX_ITERS):
 
-        model(dvdz, inout_var, a, L, C)
+        geodesic(dvdz, inout_y, a, L, κ)
 
-        scale = np.abs(inout_var) + np.abs(dvdz * h) + TINY
+        scale = np.abs(inout_y) + np.abs(dvdz * h) + TINY
 
-        z, h = rkqs(inout_var, a, L, C, dvdz, z, h, accuracy, scale, aks, tmp_int, tmp_var, tmp_err)
+        z, h = rkqs(inout_y, a, L, κ, dvdz, z, h, accuracy, scale, tmp_y, tmp_e, ak2, ak3, ak4, ak5, ak6, tmp)
 
         if z <= z_end:
 
-            return inout_var, curr_iter + 1
+            return inout_y, curr_iter
 
     ####################################################################################################################
 
-    return inout_var, N_MAX_ITERS
+    return inout_y, N_MAX_ITERS
 
 ########################################################################################################################
 
-@nb.njit(fastmath = True)
+@nb.njit
 def wrap(θ: float, ϕ: float) -> typing.Tuple[float, float]:
 
     θ = θ % TWO_PI
@@ -327,18 +342,25 @@ def wrap(θ: float, ϕ: float) -> typing.Tuple[float, float]:
 ########################################################################################################################
 
 # noinspection PyPep8Naming
+@nb.njit
 def integrate(
     r: float, θ: float, ϕ: float, pr: float, pθ: float,
-    a: float, L: float, C: float,
+    a: float, L: float, κ: float,
     z_end: float = -1.0e+7,
     accuracy: float = +1.0e-5,
     default_step: float = +1.0e-2
 ) -> typing.Tuple[np.ndarray, int]:
 
-    var, step = odeint(np.array([r, θ, ϕ, pr, pθ], dtype = np.float32), a, L, C, z_end, accuracy, default_step)
+    y, step = odeint(np.array([r, θ, ϕ, pr, pθ], dtype = np.float64), a, L, κ, z_end, accuracy, default_step)
 
-    var[1], var[2] = wrap(float(var[1]), float(var[2])) # θ and ϕ
+    y[1], y[2] = wrap(float(y[1]), float(y[2])) # θ and ϕ
 
-    return var, step
+    if step == N_MAX_ITERS:
+
+        y[0] = 0.0
+        y[1] = 0.0
+        y[2] = 0.0
+
+    return y, step
 
 ########################################################################################################################

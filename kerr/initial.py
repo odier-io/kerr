@@ -85,9 +85,9 @@ def initial(
 
     rdot_bh = zdot * (-r_bh * R1 * sinθ_bh * sinθ_obs * cosΦ - R2 * cosθ_bh * cosθ_obs) / ρ2
 
-    θdot_bh = zdot * (+r_bh * sinθ_bh * cosθ_obs - R1 * cosθ_bh * sinθ_obs * cosΦ) / ρ2 * (+100.0)
+    θdot_bh = zdot * (+r_bh * sinθ_bh * cosθ_obs - R1 * cosθ_bh * sinθ_obs * cosΦ) / ρ2
 
-    ϕdot_bh = zdot * (sinθ_obs * sinΦ) / (R1 * sinθ_bh) * (-100.0)
+    ϕdot_bh = zdot * (sinθ_obs * sinΦ) / (R1 * sinθ_bh)
 
     ####################################################################################################################
 
