@@ -52,13 +52,10 @@ D6 = +3.910220214568039e-02
 
 ERROR_THRESHOLD = 1.89e-4
 
-SAFETY = 0.9
-ADAPTIVE = 5.0
-
 POSITIVE_GROWTH = -0.20
 POSITIVE_SHRINK = -0.25
 
-N_MAX_ITERS = 10_000
+N_MAX_ITERS = 1_000
 
 ########################################################################################################################
 
@@ -249,14 +246,14 @@ def rkqs(
 
         if err_max > ERROR_THRESHOLD:
 
-            h = SAFETY * h * pow(err_max, POSITIVE_GROWTH)
+            h = 0.9 * h * pow(err_max, POSITIVE_GROWTH)
         else:
-            h = ADAPTIVE * h
+            h = 5.0 * h
 
     else:
 
         h = min(
-            SAFETY * h * pow(err_max, POSITIVE_SHRINK)
+            0.9 * h * pow(err_max, POSITIVE_SHRINK)
             ,
             0.1 * h
         )
@@ -316,11 +313,11 @@ def odeint(
 
         if z <= z_end:
 
-            return inout_y, curr_iter
+            return inout_y, curr_iter + 1
 
     ####################################################################################################################
 
-    return inout_y, N_MAX_ITERS
+    return inout_y, N_MAX_ITERS + 0
 
 ########################################################################################################################
 
