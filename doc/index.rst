@@ -10,4 +10,6 @@ Indices and tables
    :maxdepth: 1
    :caption: Contents:
 
+   kerr_transformation
+   kerr_initial
    kerr_geodesic

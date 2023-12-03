@@ -30,24 +30,24 @@ def obs_to_bh(
     Parameters
     ----------
     a : float
-        The black hole spin ∈ ]-1,+1[.
+        The black hole spin :math:`\in ]-1,+1[`.
     r_obs : float
         The observer radial distance.
     θ_obs : float
-        The observer polar angle ∈ [0,π].
+        The observer polar angle :math:`\in [0,\\pi]`.
     ϕ_obs : float
-        The observer azimuthal angle ∈ [0,2π].
+        The observer azimuthal angle :math:`\in [0,2\\pi]`.
     x : np.ndarray
-        The 1st cartesian coordinate.
+        The :math:`x` cartesian coordinate.
     y : np.ndarray
-        The 2nd cartesian coordinate.
+        The :math:`y` cartesian coordinate.
     z : np.ndarray
-        The 3rd cartesian coordinate.
+        The :math:`z` cartesian coordinate.
 
     Returns
     -------
     typing.Tuple[np.ndarray, np.ndarray, np.ndarray]
-        The resulting black hole coordinates.
+        The resulting :math:`(x',y',z')` black hole coordinates.
     """
 
     ####################################################################################################################
@@ -91,21 +91,30 @@ def cartesian_to_boyer_lindquist(
     """
     Transforms cartesian coordinates into Boyer-Lindquist coordinates.
 
+    With :math:`w\equiv x^2+y^2+z^2-a^2`:
+
+    .. math::
+        \\begin{cases}
+            r=\\sqrt{\\frac{w+\\sqrt{w^2+4a^2z^2}}{2}}\\\\
+            \\theta=\\mathrm{acos}(z/r)\\\\
+            \\phi=\\mathrm{atan2}(y,x)\\\\
+        \end{cases}
+
     Parameters
     ----------
     a : float
-        The black hole spin ∈ ]-1,+1[.
+        The black hole spin :math:`\in ]-1,+1[`.
     x : np.ndarray
-        The 1st cartesian coordinate.
+        The :math:`x` cartesian coordinate.
     y : np.ndarray
-        The 2nd cartesian coordinate.
+        The :math:`y` cartesian coordinate.
     z : np.ndarray
-        The 3rd cartesian coordinate.
+        The :math:`z` cartesian coordinate.
 
     Returns
     -------
     typing.Tuple[np.ndarray, np.ndarray, np.ndarray]
-        The resulting r, θ, ϕ Boyer-Lindquist coordinates.
+        The resulting :math:`(r,θ,ϕ)` Boyer-Lindquist coordinates.
     """
 
     ####################################################################################################################
@@ -127,6 +136,58 @@ def cartesian_to_boyer_lindquist(
         r,
         np.arccos(z / r),
         np.arctan2(y, x),
+    )
+
+########################################################################################################################
+
+@nb.njit
+def boyer_lindquist_to_cartesian(
+    a: float,
+    r: np.ndarray,
+    θ: np.ndarray,
+    ϕ: np.ndarray
+) -> typing.Tuple[np.ndarray, np.ndarray, np.ndarray]:
+
+    """
+    Transforms Boyer-Lindquist coordinates into cartesian coordinates.
+
+    .. math::
+        \\begin{cases}
+            x = \\sqrt{r^2 + a^2}\\sin\\theta\\cos\\phi\\\\
+            y = \\sqrt{r^2 + a^2}\\sin\\theta\\sin\\phi\\\\
+            z = r\\cos\\theta\\\\
+        \end{cases}
+
+    Parameters
+    ----------
+    a : float
+        The black hole spin :math:`\in ]-1,+1[`.
+    r : np.ndarray
+        The :math:`r` Boyer-Lindquist coordinate.
+    θ : np.ndarray
+        The :math:`\\theta` Boyer-Lindquist coordinate.
+    ϕ : np.ndarray
+        The :math:`\\phi` Boyer-Lindquist coordinate.
+
+    Returns
+    -------
+    typing.Tuple[np.ndarray, np.ndarray, np.ndarray]
+        The resulting :math:`(x,y,z)` cartesian coordinates.
+    """
+
+    ####################################################################################################################
+
+    r2 = r * r
+    a2 = a * a
+
+    R = np.sqrt(r2 + a2)
+
+    ####################################################################################################################
+
+    return (
+        R * np.sin(θ) * np.cos(ϕ),
+        R * np.sin(θ) * np.sin(ϕ),
+        r * np.cos(θ),
     )
 
 ########################################################################################################################
