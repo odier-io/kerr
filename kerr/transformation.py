@@ -27,6 +27,37 @@ def obs_to_bh(
     """
     Transforms the observer coordinates to the black hole coordinates.
 
+    .. math::
+        \\vec{x}'=\\hat{A}_{y=x}\\cdot\\hat{R}_z(2\\pi-\\theta_\\textrm{obs})\\cdot\\hat{R}_x(\\pi-\\phi_\\textrm{obs})\\cdot\\vec{x}+\\hat{T}_{\\vec{x}\\to\\vec{x}'}
+
+    where:
+
+    .. math::
+        \\hat{R}_x(\\pi-\\theta)=\\begin{bmatrix}
+        1 & 0 & 0 \\\\
+        0 & -\\cos(\\theta) & -\\sin(\\theta) \\\\
+        0 & +\\sin(\\theta) & -\\cos(\\theta) \\\\
+        \end{bmatrix}
+
+    .. math::
+        \\hat{R}_z(2\\pi-\\phi)=\\begin{bmatrix}
+        +\\cos(\\phi) & +\\sin(\\phi) & 0 \\\\
+        -\\sin(\\phi) & +\\cos(\\phi) & 0 \\\\
+        0 & 0 & 1 \\\\
+        \\end{bmatrix}
+
+    .. math::
+        \\hat{A}_{y=x}=\\begin{bmatrix}
+        0 & 1 & 0 \\\\
+        1 & 0 & 0 \\\\
+        0 & 0 & 1 \\\\
+        \\end{bmatrix}
+
+    and:
+
+    .. math::
+        \\hat{T}_{\\vec{x}\\to\\vec{x}'}=\\textrm{boyer_lindquist_to_cartesian}(a,r_\\textrm{obs},\\theta_\\textrm{obs},\\phi_\\textrm{obs})
+
     Parameters
     ----------
     a : float
@@ -89,9 +120,7 @@ def cartesian_to_boyer_lindquist(
 ) -> typing.Tuple[np.ndarray, np.ndarray, np.ndarray]:
 
     """
-    Transforms cartesian coordinates into Boyer-Lindquist coordinates.
-
-    With :math:`w\equiv x^2+y^2+z^2-a^2`:
+    Transforms cartesian coordinates to Boyer-Lindquist coordinates. Defining :math:`w\equiv x^2+y^2+z^2-a^2`:
 
     .. math::
         \\begin{cases}
@@ -149,7 +178,7 @@ def boyer_lindquist_to_cartesian(
 ) -> typing.Tuple[np.ndarray, np.ndarray, np.ndarray]:
 
     """
-    Transforms Boyer-Lindquist coordinates into cartesian coordinates.
+    Transforms Boyer-Lindquist coordinates to cartesian coordinates.
 
     .. math::
         \\begin{cases}
