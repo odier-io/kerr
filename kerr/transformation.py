@@ -184,7 +184,7 @@ def bh_to_obs(
 
     ####################################################################################################################
 
-    R = np.sqrt(r_obs * r_obs + a * a)
+    R = math.sqrt(r_obs * r_obs + a * a)
 
     u = -x * sinϕ_obs + y * cosϕ_obs
     v = +x * cosϕ_obs + y * sinϕ_obs
