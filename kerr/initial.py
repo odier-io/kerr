@@ -41,7 +41,7 @@ def initial(
         p_{\\theta}=\\dot{\\theta}\\frac{\\rho^2}{1}
 
     .. math::
-        E=\\sqrt{(\\rho^2 -2r)\\left(\\frac{\\dot{r}_{bh}^2}{\\Delta}+\\dot{\\theta}^2\\right)+\\Delta\\sin^2\\theta\\dot{\\phi}^2}
+        E=\\sqrt{(\\rho^2 -2r)\\left(\\frac{\\dot{r}^2}{\\Delta}+\\dot{\\theta}^2\\right)+\\Delta\\sin^2\\theta\\,\\dot{\\phi}^2}
 
     .. math::
         L=\\frac{(\\rho^2\\Delta\\dot{\\phi}- 2arE)\\sin^2\\theta}{\\rho^2-2r}
