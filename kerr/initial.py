@@ -32,7 +32,7 @@ def initial(
 ]:
 
     """
-    For photon (rest mass :math:`\\mu=0`), initial conditions are:
+    For photon (rest mass :math:`\\mu=0`), in the black hole coordinate system, initial conditions are:
 
     .. math::
         p_{r}=\\dot{r}\\frac{\\rho^2}{\\Delta}
