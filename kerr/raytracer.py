@@ -14,6 +14,7 @@ from PIL import Image
 
 from kerr.initial import initial
 from kerr.geodesic import integrate
+from kerr.transformation import boyer_lindquist_to_cartesian, bh_to_obs
 
 import matplotlib.image as img
 import matplotlib.pyplot as plt
@@ -180,6 +181,7 @@ def ray_tracer(a: float, r_cam: float, θ_cam: float, ϕ_cam: float, size_x: int
     ####################################################################################################################
 
     return (
+        r_sky.reshape(size_y, size_x),
         θ_sky.reshape(size_y, size_x),
         ϕ_sky.reshape(size_y, size_x),
     )
@@ -190,38 +192,58 @@ if __name__ == '__main__':
 
     ####################################################################################################################
 
+    inclination = 85.0
+
+    a = 0.999
+
+    r_obs = 10.0
+    θ_obs = np.pi / 180.0 * inclination
+    ϕ_obs = 00.0
+
     size_x = 300
     size_y = 150
 
-    inclination = 85.0
-
-    θ_sky, ϕ_sky = ray_tracer(
-        0.5,
+    r_sky, θ_sky, ϕ_sky = ray_tracer(
+        a,
         #
-        10.0,
-        np.pi / 180.0 * inclination,
-        0.0,
+        r_obs,
+        θ_obs,
+        ϕ_obs,
         #
         size_x,
         size_y,
         50.0
     )
 
-    sys.exit(0)
+    x_bh, y_bh, z_bh = boyer_lindquist_to_cartesian(a, r_sky, θ_sky, ϕ_sky)
+
+    x_final, y_final, z_final = bh_to_obs(a, r_obs, θ_obs, ϕ_obs, x_bh, y_bh, z_bh)
+
+    θ_final = np.arccos(z_final / np.sqrt(x_final * x_final + y_final * y_final + z_final * z_final))
+    ϕ_final = np.arctan2(y_final, x_final)
+
+    plt.imshow(θ_final.reshape(size_y, size_x))
+    plt.title('θ_final')
+    plt.show()
+    plt.close()
+
+    plt.imshow(ϕ_final.reshape(size_y, size_x))
+    plt.title('ϕ_final')
+    plt.show()
+    plt.close()
 
     ####################################################################################################################
 
-    sky_orig = img.imread('/Users/jodier/PycharmProjects/kerr/rainbow.png')
+    sky_orig = img.imread('/Users/jodier/PycharmProjects/kerr/eso.png')
+    #sky_orig = img.imread('/Users/jodier/PycharmProjects/kerr/rainbow.png')
 
-    X = sky_orig.shape[1]
     Y = sky_orig.shape[0]
+    X = sky_orig.shape[1]
 
     ####################################################################################################################
 
-    θ_sky_image = np.array(Image.fromarray(θ_sky).resize((Y, X), Image.Resampling.LANCZOS))
-    ϕ_sky_image = np.array(Image.fromarray(ϕ_sky).resize((Y, X), Image.Resampling.LANCZOS))
-
-    print(θ_sky_image.shape)
+    θ_sky_image = np.array(Image.fromarray(θ_final.reshape(size_y, size_x)).resize((X, Y), Image.Resampling.LANCZOS))
+    ϕ_sky_image = np.array(Image.fromarray(ϕ_final.reshape(size_y, size_x)).resize((X, Y), Image.Resampling.LANCZOS))
 
     ####################################################################################################################
 

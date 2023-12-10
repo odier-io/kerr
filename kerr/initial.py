@@ -31,6 +31,35 @@ def initial(
     np.ndarray, np.ndarray, np.ndarray,
 ]:
 
+    """
+    For photon (rest mass μ=0), initial conditions are:
+
+    .. math::
+        p_{r}=\\dot{r}\\frac{\\rho^2}{\\Delta}
+
+    .. math::
+        p_{\\theta}=\\dot{\\theta}\\frac{\\rho^2}{1}
+
+    .. math::
+        E=\\sqrt{(\\rho^2 -2r)\\left(\\frac{\\dot{r}_{bh}^2}{\\Delta}+\\dot{\\theta}^2\\right)+\\Delta\\sin^2\\theta\\dot{\\phi}^2}
+
+    .. math::
+        L=\\frac{(\\rho^2\\Delta\\dot{\\phi}- 2arE)\\sin^2\\theta}{\\rho^2-2r}
+
+    where:
+
+    .. math::
+        \\dot{r}=-\\frac{r\\mathcal{R}\\sin\\theta\\sin\\theta_{obs}\\cos\\Phi+\\mathcal{R}^2\\cos\\theta\\cos\\theta_{obs}}{\\rho^2}
+
+    .. math::
+        \\dot{\\theta}=+\\frac{r\\sin\\theta\\cos\\theta_{obs}-\\mathcal{R}\\cos\\theta\\sin\\theta_{obs}\\cos\\Phi}{\\rho^2}
+
+    .. math::
+        \\dot{\\phi}=\\frac{\\sin\\theta_{obs}\\sin\\Phi}{\\mathcal{R}\\sin\\theta}
+
+    and :math:`\\mathcal{R}\\equiv\\sqrt{r^2+a^2}` and :math:`\\Phi\\equiv\\phi-\\phi_{obs}`.
+    """
+
     ####################################################################################################################
 
     x_bh, y_bh, z_bh = obs_to_bh(a, r_obs, θ_obs, ϕ_obs, x, y, z)
