@@ -4,9 +4,9 @@
 
 import numpy as np
 
-from kerr.transformation import obs_to_bh, bh_to_obs
+from kerr.coord import obs_to_bh, bh_to_obs
 
-from kerr.transformation import cartesian_to_boyer_lindquist, boyer_lindquist_to_cartesian
+from kerr.coord import cartesian_to_boyer_lindquist, boyer_lindquist_to_cartesian
 
 ########################################################################################################################
 

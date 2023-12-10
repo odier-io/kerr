@@ -14,7 +14,7 @@ from PIL import Image
 
 from kerr.initial import initial
 from kerr.geodesic import integrate
-from kerr.transformation import boyer_lindquist_to_cartesian, bh_to_obs
+from kerr.coord import boyer_lindquist_to_cartesian, bh_to_obs
 
 import matplotlib.image as img
 import matplotlib.pyplot as plt

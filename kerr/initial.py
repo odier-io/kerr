@@ -11,7 +11,7 @@ import typing
 import numpy as np
 import numba as nb
 
-from kerr.transformation import obs_to_bh, cartesian_to_boyer_lindquist
+from kerr.coord import obs_to_bh, cartesian_to_boyer_lindquist
 
 ########################################################################################################################
 
@@ -58,6 +58,13 @@ def initial(
         \\dot{\\phi}=\\frac{\\sin\\theta_{obs}\\sin\\Phi}{\\mathcal{R}\\sin\\theta}
 
     and :math:`\\mathcal{R}\\equiv\\sqrt{r^2+a^2}` and :math:`\\Phi\\equiv\\phi-\\phi_{obs}`.
+
+    .. raw
+        <pre>
+        x_bh, y_bh, z_bh = obs_to_bh(a, r_obs, θ_obs, ϕ_obs, x, y, z)
+
+        r, θ, ϕ = cartesian_to_boyer_lindquist(a, x_bh, y_bh, z_bh)
+        </pre>
     """
 
     ####################################################################################################################
