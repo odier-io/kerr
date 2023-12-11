@@ -27,7 +27,6 @@ extensions = [
     'numpydoc',
     'sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
-    'sphinxawesome_theme.highlighting',
 ]
 
 autodoc_default_options = {

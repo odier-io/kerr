@@ -234,8 +234,8 @@ if __name__ == '__main__':
 
     ####################################################################################################################
 
-    sky_orig = img.imread('/Users/jodier/PycharmProjects/kerr/eso.png')
-    #sky_orig = img.imread('/Users/jodier/PycharmProjects/kerr/rainbow.png')
+    #sky_orig = img.imread('/Users/jodier/PycharmProjects/kerr/eso.png')
+    sky_orig = img.imread('/Users/jodier/PycharmProjects/kerr/rainbow.png')
 
     Y = sky_orig.shape[0]
     X = sky_orig.shape[1]
