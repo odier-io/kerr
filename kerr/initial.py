@@ -54,6 +54,9 @@ def initial(
     .. math::
         Q=p_\\theta^2+\\left[\\frac{L_z^2}{\\sin^2\\theta}-a^2(E^2+\\mu)\\right]\\cos^2\\theta
 
+    .. math::
+        \\kappa=Q+L_z^2+a^2(E^2+\\mu)
+
     where:
 
     .. math::

@@ -66,7 +66,8 @@ def geodesic(
     y: np.ndarray,
     a: float,
     L: float,
-    κ: float
+    κ: float,
+    µ: float = 0.0
 ) -> None:
 
     """
@@ -79,13 +80,13 @@ def geodesic(
         \\frac{d\\theta}{dz}=p_\\theta\\times\\frac{1}{\\rho^2}
 
     .. math::
-        \\frac{d\\phi}{dz}=\\frac{2ar+(\\rho^2-2r)L/\\sin^2\\theta}{\\rho^2\\Delta}
+        \\frac{d\\phi}{dz}=\\frac{2ar+(\\rho^2-2r)\\frac{L}{\\sin^2\\theta}}{\\rho^2\\Delta}
 
     .. math::
-        \\frac{dp_r}{dz}=\\frac{(-\\kappa)(r-1)+2r(r^2+a^2)-2aL}{\\rho^2\\Delta}-\\frac{2p_r^2(r-1)}{\\rho^2}
+        \\frac{dp_r}{dz}=\\frac{(\\mathcal{R}^2\\mu-2\\Delta p_r^2-\\kappa)(r-1)+(2\\mathcal{R}^2+\\Delta\\mu)r-2aL_z}{\\rho^2\\Delta}
 
     .. math::
-        \\frac{dp_\\theta}{dz}=\\frac{\\sin\\theta\\cos\\theta}{\\rho^2}\\left[(L/\\sin^2\\theta)^2-a^2\\right]
+        \\frac{dp_\\theta}{dz}=\\frac{\\sin\\theta\\cos\\theta}{\\rho^2}\\left[\\frac{L_z^2}{\\sin^4\\theta}-a^2(1+\\mu)\\right]
 
     Where :math:`a\\equiv\\frac{J}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L` is the projection of the particle angular momentum along the black hole spin axis, :math:`C` the Carter constant and:
 
@@ -95,8 +96,8 @@ def geodesic(
     .. math::
         \\Delta\\equiv r^2-2r+a^2
 
-    .. math::
-        \\kappa\\equiv C+L^2+a^2
+    .. :math:
+        \\mathcal{R}\\equiv\\sqrt{r^2+a^2}
     """
 
     ####################################################################################################################
@@ -111,7 +112,8 @@ def geodesic(
     r2 = r * r
     L2 = L * L
 
-    twoa = 2.0 * a
+    R2 = r2 + a2
+
     twor = 2.0 * r
 
     ####################################################################################################################
@@ -148,9 +150,9 @@ def geodesic(
     # dϕdz
     out_dydx[2] = (2.0 * a * r + (ρ2 - twor) * L / sin2θ) / (ρ2 * Δ)
     # dprdz
-    out_dydx[3] = ((-κ) * (r - 1.0) + twor * (r2 + a2) - twoa * L) / (ρ2 * Δ) - (pr * pr) * (twor - 2.0) / ρ2
+    out_dydx[3] = ((R2 * µ - 2.0 * Δ * pr * pr - κ) * (r - 1.0) + (2.0 * R2 + Δ * µ) * r - 2.0 * a * L) / (ρ2 * Δ)
     # dpθdz
-    out_dydx[4] = (sinθ * cosθ) * (L2 / sin4θ - a2) / ρ2
+    out_dydx[4] = (sinθ * cosθ) * (L2 / sin4θ - a2 * (1.0 + µ)) / ρ2
 
 ########################################################################################################################
 
