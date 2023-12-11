@@ -96,7 +96,7 @@ def initial(
     z : np.ndarray
         The :math:`z` cartesian coordinate.
     µ : float
-        The rest mass (0 for massless particles and -1 for particles with mass).
+        The rest mass (0 for massless particles, -1 otherwise).
     """
 
     if µ != 0.0 and µ != -1.0:
