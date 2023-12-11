@@ -36,13 +36,14 @@ def initial(
     In the black hole coordinate system, initial conditions are:
 
     .. math::
-        p_{r}=\\frac{\\rho^2}{\\Delta}\\dot{r}
-
-    .. math::
-        p_{\\theta}=\\frac{\\rho^2}{1}\\dot{\\theta}
-
-    .. math::
-        p_{\\phi}=L_z
+        \\left\\{
+        \\begin{array}{ll}
+            p_t&=&-E\\\\
+            p_r&=&\\frac{\\rho^2}{\\Delta}\\dot{r}\\\\
+            p_\\theta&=&\\frac{\\rho^2}{1}\\dot{\\theta}\\\\
+            p_\\phi&=&+L_z\\\\
+        \\end{array}
+        \\right.
 
     .. math::
         E=\\sqrt{\\frac{\\rho^2 -2r}{\\rho^2\\Delta}\\left(\\rho^2\\dot{r}^2+\\rho^2\\Delta\\dot{\\theta}^2-\\Delta\\mu\\right)+\\Delta\\sin^2\\theta\\,\\dot{\\phi}^2}
