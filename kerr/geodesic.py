@@ -83,12 +83,12 @@ def geodesic(
         \\frac{d\\phi}{dz}=\\frac{2ar+(\\rho^2-2r)\\frac{L}{\\sin^2\\theta}}{\\rho^2\\Delta}
 
     .. math::
-        \\frac{dp_r}{dz}=\\frac{(\\mathcal{R}^2\\mu-2\\Delta p_r^2-\\kappa)(r-1)+(2\\mathcal{R}^2+\\Delta\\mu)r-2aL_z}{\\rho^2\\Delta}
+        \\frac{dp_r}{dz}=\\frac{(\\mathcal{R}^2\\mu+2\\Delta p_r^2+\\kappa)(1-r)+(2\\mathcal{R}^2-\\Delta\\mu)r-2aL_z}{\\rho^2\\Delta}
 
     .. math::
-        \\frac{dp_\\theta}{dz}=\\frac{\\sin\\theta\\cos\\theta}{\\rho^2}\\left[\\frac{L_z^2}{\\sin^4\\theta}-a^2(1+\\mu)\\right]
+        \\frac{dp_\\theta}{dz}=\\frac{\\sin\\theta\\cos\\theta}{\\rho^2}\\left[\\frac{L_z^2}{\\sin^4\\theta}+a^2(\\mu-1)\\right]
 
-    Where :math:`a\\equiv\\frac{J}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L` is the projection of the particle angular momentum along the black hole spin axis, :math:`C` the Carter constant and:
+    Where :math:`a\\equiv\\frac{J}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis, :math:`C` the Carter constant and:
 
     .. math::
         \\rho^2\\equiv r^2+a^2\\cos^2\\theta
@@ -143,16 +143,16 @@ def geodesic(
 
     ####################################################################################################################
 
-    # drdz
+    # dr/dz
     out_dydx[0] = pr * (Δ / ρ2)
-    # dθdz
+    # dθ/dz
     out_dydx[1] = pθ * (1 / ρ2)
-    # dϕdz
+    # dϕ/dz
     out_dydx[2] = (2.0 * a * r + (ρ2 - twor) * L / sin2θ) / (ρ2 * Δ)
-    # dprdz
-    out_dydx[3] = ((R2 * µ - 2.0 * Δ * pr * pr - κ) * (r - 1.0) + (2.0 * R2 + Δ * µ) * r - 2.0 * a * L) / (ρ2 * Δ)
-    # dpθdz
-    out_dydx[4] = (sinθ * cosθ) * (L2 / sin4θ - a2 * (1.0 + µ)) / ρ2
+    # dpr/dz
+    out_dydx[3] = ((R2 * µ + 2.0 * Δ * pr * pr + κ) * (1.0 - r) + (2.0 * R2 - Δ * µ) * r - 2.0 * a * L) / (ρ2 * Δ)
+    # dpθ/dz
+    out_dydx[4] = (sinθ * cosθ) * (L2 / sin4θ + a2 * (µ - 1.0)) / ρ2
 
 ########################################################################################################################
 

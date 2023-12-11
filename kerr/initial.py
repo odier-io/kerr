@@ -46,16 +46,16 @@ def initial(
         \\right.
 
     .. math::
-        E=\\sqrt{\\frac{\\rho^2 -2r}{\\rho^2\\Delta}\\left(\\rho^2\\dot{r}^2+\\rho^2\\Delta\\dot{\\theta}^2-\\Delta\\mu\\right)+\\Delta\\sin^2\\theta\\,\\dot{\\phi}^2}
+        E=\\sqrt{\\frac{\\rho^2 -2r}{\\rho^2\\Delta}\\left(\\rho^2\\dot{r}^2+\\rho^2\\Delta\\dot{\\theta}^2+\\Delta\\mu\\right)+\\Delta\\sin^2\\theta\\,\\dot{\\phi}^2}
 
     .. math::
         L_z=\\left[\\frac{\\rho^2\\Delta\\dot{\\phi}-2arE}{\\rho^2-2r}\\right]\\sin^2\\theta
 
     .. math::
-        Q=p_\\theta^2+\\left[\\frac{L_z^2}{\\sin^2\\theta}-a^2(E^2+\\mu)\\right]\\cos^2\\theta
+        Q=p_\\theta^2+\\left[\\frac{L_z^2}{\\sin^2\\theta}+a^2(\\mu-E^2)\\right]\\cos^2\\theta
 
     .. math::
-        \\kappa=Q+L_z^2+a^2(E^2+\\mu)
+        \\kappa=Q+L_z^2-a^2(\\mu-E^2)
 
     where:
 
@@ -100,12 +100,12 @@ def initial(
     z : np.ndarray
         The :math:`z` cartesian coordinate.
     µ : float
-        The rest mass (0 for massless particles, -1 otherwise).
+        The rest mass (0 for massless particles, 1 otherwise).
     """
 
-    if µ != 0.0 and µ != -1.0:
+    if µ != 0.0 and µ != 1.0:
 
-        raise ValueError('Rest mass have to be either 0 or -1.')
+        raise ValueError('Rest mass have to be either 0 or 1.')
 
     ####################################################################################################################
 
@@ -174,7 +174,7 @@ def initial(
 
     ####################################################################################################################
 
-    E = np.sqrt((ρ2 - 2.0 * r_bh) * (ρ2 * rdot_bh * rdot_bh + ρ2 * Δ * θdot_bh * θdot_bh - Δ * µ) / (ρ2 * Δ) + Δ * sin2θ_bh * ϕdot_bh * ϕdot_bh)
+    E = np.sqrt((ρ2 - 2.0 * r_bh) * (ρ2 * rdot_bh * rdot_bh + ρ2 * Δ * θdot_bh * θdot_bh + Δ * µ) / (ρ2 * Δ) + Δ * sin2θ_bh * ϕdot_bh * ϕdot_bh)
 
     L = (ρ2 * Δ * ϕdot_bh - 2.0 * a * r_bh * E) * sin2θ_bh / (ρ2 - 2.0 * r_bh)
 
@@ -188,11 +188,11 @@ def initial(
 
     L2 = L * L
 
-    a21mu = a2 * (1.0 + µ)
+    a21mu = a2 * (µ - 1.0)
 
-    Q = pθ_bh * pθ_bh + (L2 / sin2θ_bh - a21mu) * cos2θ_bh
+    Q = pθ_bh * pθ_bh + (L2 / sin2θ_bh + a21mu) * cos2θ_bh
 
-    κ = Q + L2 + a21mu
+    κ = Q + L2 - a21mu
 
     ####################################################################################################################
 
