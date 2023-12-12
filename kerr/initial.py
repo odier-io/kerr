@@ -33,16 +33,25 @@ def initial(
 ]:
 
     """
-    In the black hole coordinate system, initial conditions are:
+    From the Kerr lagrangian:
+
+    .. math::
+        \\begin{eqnarray}
+            \\mathcal{L}(x^\\mu,\\dot{x}^\\mu)&=&\\frac{1}{2}g_{\\mu\\nu}\\dot{x}^\\mu\\dot{x}^\\nu\\\\
+                                              &=&\\frac{1}{2}\\left[-\\left(1-\\frac{2r}{\\rho^2}\\right)\\dot{t}^2-\\frac{4ar\\sin^2\\theta}{\\rho^2}\\dot{t}\\dot{\\phi}\\right.\\\\
+                                              & &\\left.+\\frac{\\rho^2}{\\Delta}\\dot{r}^2+\\frac{\\rho^2}{1}\\dot{\\theta}^2+\\left(r^2+a^2+\\frac{2a^2r\\sin^2\\theta}{\\rho^2}\\right)\\sin^2\\theta\,\\dot{\\phi}^2\\right]\\\\
+        \\end{eqnarray}
+
+    initial conditions are:
 
     .. math::
         \\left\\{
-        \\begin{array}{ll}
-            p_t&=&-E\\\\
-            p_r&=&\\frac{\\rho^2}{\\Delta}\\dot{r}\\\\
-            p_\\theta&=&\\frac{\\rho^2}{1}\\dot{\\theta}\\\\
-            p_\\phi&=&+L_z\\\\
-        \\end{array}
+        \\begin{eqnarray}
+            p_t\\equiv\\frac{\\partial\\mathcal{L}}{\\partial\\dot{t}}&=&-E\\\\
+            p_r\\equiv\\frac{\\partial\\mathcal{L}}{\\partial\\dot{r}}&=&\\frac{\\rho^2}{\\Delta}\\dot{r}\\\\
+            p_\\theta\\equiv\\frac{\\partial\\mathcal{L}}{\\partial\\dot{\\theta}}&=&\\frac{\\rho^2}{1}\\dot{\\theta}\\\\
+            p_\\phi\\equiv\\frac{\\partial\\mathcal{L}}{\\partial\\dot{\\phi}}&=&+L_z\\\\
+        \\end{eqnarray}
         \\right.
 
     .. math::
@@ -57,7 +66,7 @@ def initial(
     .. math::
         \\kappa=Q+L_z^2-a^2(\\mu-E^2)
 
-    where:
+    where :math:`a\\equiv\\frac{L}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis, :math:`C` the Carter constant and:
 
     .. math::
         \\rho^2\\equiv r^2+a^2\\cos^2\\theta
@@ -65,7 +74,7 @@ def initial(
     .. math::
         \\Delta\\equiv r^2-2r+a^2
 
-    and:
+    Initial velocities :math:`\\dot{r}`, :math:`\\dot{\\theta}` and :math:`\\dot{\\phi}` are determined ...
 
     .. math::
         \\dot{r}=-\\frac{r\\mathcal{R}\\sin\\theta\\sin\\theta_{obs}\\cos\\Phi+\\mathcal{R}^2\\cos\\theta\\cos\\theta_{obs}}{\\rho^2}

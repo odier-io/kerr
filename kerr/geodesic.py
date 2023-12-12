@@ -80,10 +80,10 @@ def geodesic(
         \\frac{d\\theta}{dz}=p_\\theta\\times\\frac{1}{\\rho^2}
 
     .. math::
-        \\frac{d\\phi}{dz}=\\frac{2ar+(\\rho^2-2r)\\frac{L}{\\sin^2\\theta}}{\\rho^2\\Delta}
+        \\frac{d\\phi}{dz}=\\frac{2ar+(\\rho^2-2r)\\frac{L_z}{\\sin^2\\theta}}{\\rho^2\\Delta}
 
     .. math::
-        \\frac{dp_r}{dz}=\\frac{(\\mathcal{R}^2\\mu+2\\Delta p_r^2+\\kappa)(1-r)+(2\\mathcal{R}^2-\\Delta\\mu)r-2aL_z}{\\rho^2\\Delta}
+        \\frac{dp_r}{dz}=\\frac{(-\\mathcal{R}^2\\mu-2\\Delta p_r^2-\\kappa)(r-1)+(2\\mathcal{R}^2-\\Delta\\mu)r-2aL_z}{\\rho^2\\Delta}
 
     .. math::
         \\frac{dp_\\theta}{dz}=\\frac{\\sin\\theta\\cos\\theta}{\\rho^2}\\left[\\frac{L_z^2}{\\sin^4\\theta}+a^2(\\mu-1)\\right]
