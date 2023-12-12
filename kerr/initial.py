@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ########################################################################################################################
 
-"""Particle initial conditions."""
+"""Particle initial conditions starting from the observer’s grid."""
 
 ########################################################################################################################
 
@@ -33,7 +33,7 @@ def initial(
 ]:
 
     """
-    Toto
+    Particle initial conditions starting from the observer’s grid.
 
     Parameters
     ----------
@@ -108,9 +108,9 @@ def initial(
     .. math::
         \\left\\{
         \\begin{eqnarray}
-            \\dot{x}&=&-\\sin\\theta_{obs}\\cos\\phi_{obs}\\\\
-            \\dot{y}&=&-\\sin\\theta_{obs}\\sin\\phi_{obs}\\\\
-            \\dot{z}&=&-\\cos\\theta_{obs}\\\\
+            \\dot{x}&=&-\\sin\\theta_\\text{obs}\\cos\\phi_\\text{obs}\\\\
+            \\dot{y}&=&-\\sin\\theta_\\text{obs}\\sin\\phi_\\text{obs}\\\\
+            \\dot{z}&=&-\\cos\\theta_\\text{obs}\\\\
         \\end{eqnarray}
         \\right.
 
@@ -128,14 +128,13 @@ def initial(
     .. math::
         \\left\\{
         \\begin{eqnarray}
-            \\dot{r}&=&-\\frac{r\\mathcal{R}\\sin\\theta\\sin\\theta_{obs}\\cos\\Phi+\\mathcal{R}^2\\cos\\theta\\cos\\theta_{obs}}{\\rho^2}\\\\
-            \\dot{\\theta}&=&+\\frac{r\\sin\\theta\\cos\\theta_{obs}-\\mathcal{R}\\cos\\theta\\sin\\theta_{obs}\\cos\\Phi}{\\rho^2}\\\\
-            \\dot{\\phi}&=&\\frac{\\sin\\theta_{obs}\\sin\\Phi}{\\mathcal{R}\\sin\\theta}\\\\
+            \\dot{r}&=&-\\frac{r\\mathcal{R}\\sin\\theta\\sin\\theta_\\text{obs}\\cos\\Phi+\\mathcal{R}^2\\cos\\theta\\cos\\theta_\\text{obs}}{\\rho^2}\\\\
+            \\dot{\\theta}&=&+\\frac{r\\sin\\theta\\cos\\theta_\\text{obs}-\\mathcal{R}\\cos\\theta\\sin\\theta_\\text{obs}\\cos\\Phi}{\\rho^2}\\\\
+            \\dot{\\phi}&=&\\frac{\\sin\\theta_\\text{obs}\\sin\\Phi}{\\mathcal{R}\\sin\\theta}\\\\
         \\end{eqnarray}
         \\right.
 
-    where :math:`\\mathcal{R}\\equiv\\sqrt{r^2+a^2}` and :math:`\\Phi\\equiv\\phi-\\phi_{obs}`.
-
+    where :math:`\\mathcal{R}\\equiv\\sqrt{r^2+a^2}` and :math:`\\Phi\\equiv\\phi-\\phi_\\text{obs}`.
     """
 
     if µ != 0.0 and µ != 1.0:
