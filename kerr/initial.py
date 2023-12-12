@@ -56,7 +56,7 @@ def initial(
 
     Returns
     -------
-        The initial conditions :math:`(r,\\theta,\\phi,p_r,p_\\theta,E,L,Q,\\kappa)`.
+        The initial condition tuple :math:`(r,\\theta,\\phi,p_r,p_\\theta,E,L,Q,\\kappa)`.
 
     Notes
     -----
@@ -64,7 +64,7 @@ def initial(
 
     .. math::
         \\begin{eqnarray}
-            \\mathcal{L}(x^\\mu,\\dot{x}^\\mu)&=&\\frac{1}{2}g_{\\mu\\nu}\\dot{x}^\\mu\\dot{x}^\\nu\\\\
+            \\mathscr{L}(x^\\mu,\\dot{x}^\\mu)&=&\\frac{1}{2}g_{\\mu\\nu}\\dot{x}^\\mu\\dot{x}^\\nu\\\\
                                               &=&\\frac{1}{2}\\left[-\\left(1-\\frac{2r}{\\rho^2}\\right)\\dot{t}^2-\\frac{4ar\\sin^2\\theta}{\\rho^2}\\dot{t}\\dot{\\phi}\\right.\\\\
                                               & &\\left.+\\frac{\\rho^2}{\\Delta}\\dot{r}^2+\\frac{\\rho^2}{1}\\dot{\\theta}^2+\\left(r^2+a^2+\\frac{2a^2r\\sin^2\\theta}{\\rho^2}\\right)\\sin^2\\theta\,\\dot{\\phi}^2\\right]\\\\
         \\end{eqnarray}
@@ -74,10 +74,10 @@ def initial(
     .. math::
         \\left\\{
         \\begin{eqnarray}
-            p_t\\equiv\\frac{\\partial\\mathcal{L}}{\\partial\\dot{t}}&=&-E\\\\
-            p_r\\equiv\\frac{\\partial\\mathcal{L}}{\\partial\\dot{r}}&=&\\frac{\\rho^2}{\\Delta}\\dot{r}\\\\
-            p_\\theta\\equiv\\frac{\\partial\\mathcal{L}}{\\partial\\dot{\\theta}}&=&\\frac{\\rho^2}{1}\\dot{\\theta}\\\\
-            p_\\phi\\equiv\\frac{\\partial\\mathcal{L}}{\\partial\\dot{\\phi}}&=&+L_z\\\\
+            p_t\\equiv\\frac{\\partial\\mathscr{L}}{\\partial\\dot{t}}&=&-E\\\\
+            p_r\\equiv\\frac{\\partial\\mathscr{L}}{\\partial\\dot{r}}&=&\\frac{\\rho^2}{\\Delta}\\dot{r}\\\\
+            p_\\theta\\equiv\\frac{\\partial\\mathscr{L}}{\\partial\\dot{\\theta}}&=&\\frac{\\rho^2}{1}\\dot{\\theta}\\\\
+            p_\\phi\\equiv\\frac{\\partial\\mathscr{L}}{\\partial\\dot{\\phi}}&=&+L_z\\\\
         \\end{eqnarray}
         \\right.
 
@@ -114,7 +114,7 @@ def initial(
         \\end{eqnarray}
         \\right.
 
-    Then, initial spherical velocities :math:`(\\dot{r},\\dot{\\theta},\\dot{\\phi})` are determined by differentiating :math:`(r,\\theta,\\phi)` = :func:`kerr.coord.cartesian_to_boyer_lindquist` and substituting :math:`(x,y,z)` = :func:`kerr.coord.boyer_lindquist_to_cartesian` and :math:`(\\dot{x},\\dot{y},\\dot{z})`:
+    Then, initial spherical velocities :math:`(\\dot{r},\\dot{\\theta},\\dot{\\phi})` are determined by differentiating :math:`(r,\\theta,\\phi)` = :func:`kerr.coord.cartesian_to_boyer_lindquist` and substituting :math:`(x,y,z)\\to` :func:`kerr.coord.boyer_lindquist_to_cartesian` and :math:`(\\dot{x},\\dot{y},\\dot{z})\\to\\dotsb`:
 
     .. math::
         \\left\\{
