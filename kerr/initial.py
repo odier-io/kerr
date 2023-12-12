@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ########################################################################################################################
 
-"""Photon initial conditions."""
+"""Particle initial conditions."""
 
 ########################################################################################################################
 
@@ -33,6 +33,33 @@ def initial(
 ]:
 
     """
+    Toto
+
+    Parameters
+    ----------
+    a : float
+        The black hole spin :math:`\\in ]-1,+1[`.
+    r_obs : float
+        The observer radial distance.
+    θ_obs : float
+        The observer polar angle :math:`\\in [0,\\pi]`.
+    ϕ_obs : float
+        The observer azimuthal angle :math:`\\in [0,2\\pi]`.
+    x : np.ndarray
+        The :math:`x` cartesian coordinate.
+    y : np.ndarray
+        The :math:`y` cartesian coordinate.
+    z : np.ndarray
+        The :math:`z` cartesian coordinate.
+    µ : float
+        The rest mass (0 for massless particles, 1 otherwise).
+
+    Returns
+    -------
+        The initial conditions :math:`(r,\\theta,\\phi,p_r,p_\\theta,E,L,Q,\\kappa)`.
+
+    Notes
+    -----
     From the Kerr lagrangian:
 
     .. math::
@@ -54,6 +81,8 @@ def initial(
         \\end{eqnarray}
         \\right.
 
+    with:
+
     .. math::
         E=\\sqrt{\\frac{\\rho^2 -2r}{\\rho^2\\Delta}\\left(\\rho^2\\dot{r}^2+\\rho^2\\Delta\\dot{\\theta}^2+\\Delta\\mu\\right)+\\Delta\\sin^2\\theta\\,\\dot{\\phi}^2}
 
@@ -66,7 +95,7 @@ def initial(
     .. math::
         \\kappa=Q+L_z^2-a^2(\\mu-E^2)
 
-    where :math:`a\\equiv\\frac{L}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis, :math:`C` the Carter constant and:
+    where :math:`a\\equiv\\frac{L}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis, :math:`Q` the Carter constant and:
 
     .. math::
         \\rho^2\\equiv r^2+a^2\\cos^2\\theta
@@ -74,42 +103,39 @@ def initial(
     .. math::
         \\Delta\\equiv r^2-2r+a^2
 
-    Initial velocities :math:`\\dot{r}`, :math:`\\dot{\\theta}` and :math:`\\dot{\\phi}` are determined ...
+    In the black hole system coordinate, initial cartesian velocities :math:`(\\dot{x},\\dot{y},\\dot{z})` are determined by differentiating :func:`kerr.coord.obs_to_bh` along the photon arrival direction (= z direction):
 
     .. math::
-        \\dot{r}=-\\frac{r\\mathcal{R}\\sin\\theta\\sin\\theta_{obs}\\cos\\Phi+\\mathcal{R}^2\\cos\\theta\\cos\\theta_{obs}}{\\rho^2}
+        \\left\\{
+        \\begin{eqnarray}
+            \\dot{x}&=&-\\sin\\theta_{obs}\\cos\\phi_{obs}\\\\
+            \\dot{y}&=&-\\sin\\theta_{obs}\\sin\\phi_{obs}\\\\
+            \\dot{z}&=&-\\cos\\theta_{obs}\\\\
+        \\end{eqnarray}
+        \\right.
+
+    Then, initial spherical velocities :math:`(\\dot{r},\\dot{\\theta},\\dot{\\phi})` are determined by differentiating :math:`(r,\\theta,\\phi)` = :func:`kerr.coord.cartesian_to_boyer_lindquist` and substituting :math:`(x,y,z)` = :func:`kerr.coord.boyer_lindquist_to_cartesian` and :math:`(\\dot{x},\\dot{y},\\dot{z})`:
 
     .. math::
-        \\dot{\\theta}=+\\frac{r\\sin\\theta\\cos\\theta_{obs}-\\mathcal{R}\\cos\\theta\\sin\\theta_{obs}\\cos\\Phi}{\\rho^2}
+        \\left\\{
+        \\begin{eqnarray}
+            \\dot{r}&=&\\frac{\\partial r}{\\partial x}\\dot{x}+\\frac{\\partial r}{\\partial y}\\dot{y}+\\frac{\\partial r}{\\partial z}\\dot{z}\\\\
+            \\dot{\\theta}&=&\\frac{\\partial\\theta}{\\partial x}\\dot{x}+\\frac{\\partial\\theta}{\\partial y}\\dot{y}+\\frac{\\partial\\theta}{\\partial z}\\dot{z}\\\\
+            \\dot{\\phi}&=&\\frac{\\partial\\phi}{\\partial x}\\dot{x}+\\frac{\\partial\\phi}{\\partial y}\\dot{y}+\\frac{\\partial\\phi}{\\partial z}\\dot{z}\\\\
+        \\end{eqnarray}
+        \\right|_{\\text{subs. }(x,y,z)\\text{ and }(\\dot{x},\\dot{y},\\dot{z})}
 
     .. math::
-        \\dot{\\phi}=\\frac{\\sin\\theta_{obs}\\sin\\Phi}{\\mathcal{R}\\sin\\theta}
+        \\left\\{
+        \\begin{eqnarray}
+            \\dot{r}&=&-\\frac{r\\mathcal{R}\\sin\\theta\\sin\\theta_{obs}\\cos\\Phi+\\mathcal{R}^2\\cos\\theta\\cos\\theta_{obs}}{\\rho^2}\\\\
+            \\dot{\\theta}&=&+\\frac{r\\sin\\theta\\cos\\theta_{obs}-\\mathcal{R}\\cos\\theta\\sin\\theta_{obs}\\cos\\Phi}{\\rho^2}\\\\
+            \\dot{\\phi}&=&\\frac{\\sin\\theta_{obs}\\sin\\Phi}{\\mathcal{R}\\sin\\theta}\\\\
+        \\end{eqnarray}
+        \\right.
 
-    and :math:`\\mathcal{R}\\equiv\\sqrt{r^2+a^2}` and :math:`\\Phi\\equiv\\phi-\\phi_{obs}`.
+    where :math:`\\mathcal{R}\\equiv\\sqrt{r^2+a^2}` and :math:`\\Phi\\equiv\\phi-\\phi_{obs}`.
 
-    .. codeblock:: python
-
-        x_bh, y_bh, z_bh = obs_to_bh(a, r_obs, θ_obs, ϕ_obs, x, y, z)
-        r, θ, ϕ = cartesian_to_boyer_lindquist(a, x_bh, y_bh, z_bh)
-
-    Parameters
-    ----------
-    a : float
-        The black hole spin :math:`\\in ]-1,+1[`.
-    r_obs : float
-        The observer radial distance.
-    θ_obs : float
-        The observer polar angle :math:`\\in [0,\\pi]`.
-    ϕ_obs : float
-        The observer azimuthal angle :math:`\\in [0,2\\pi]`.
-    x : np.ndarray
-        The :math:`x` cartesian coordinate.
-    y : np.ndarray
-        The :math:`y` cartesian coordinate.
-    z : np.ndarray
-        The :math:`z` cartesian coordinate.
-    µ : float
-        The rest mass (0 for massless particles, 1 otherwise).
     """
 
     if µ != 0.0 and µ != 1.0:
