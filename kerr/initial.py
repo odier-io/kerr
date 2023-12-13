@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ########################################################################################################################
 
-"""Particle initial conditions starting from the observer’s grid."""
+"""Initial conditions of particles starting from the observer’s grid."""
 
 ########################################################################################################################
 
@@ -33,7 +33,7 @@ def initial(
 ]:
 
     """
-    Particle initial conditions starting from the observer’s grid.
+    Initial conditions of particles starting from the observer’s grid.
 
     Parameters
     ----------
@@ -65,9 +65,15 @@ def initial(
     .. math::
         \\begin{eqnarray}
             \\mathscr{L}(x^\\mu,\\dot{x}^\\mu)&=&\\frac{1}{2}g_{\\mu\\nu}\\dot{x}^\\mu\\dot{x}^\\nu\\\\
-                                              &=&\\frac{1}{2}\\left[-\\left(1-\\frac{2r}{\\rho^2}\\right)\\dot{t}^2-\\frac{4ar\\sin^2\\theta}{\\rho^2}\\dot{t}\\dot{\\phi}\\right.\\\\
-                                              & &\\left.+\\frac{\\rho^2}{\\Delta}\\dot{r}^2+\\frac{\\rho^2}{1}\\dot{\\theta}^2+\\left(r^2+a^2+\\frac{2a^2r\\sin^2\\theta}{\\rho^2}\\right)\\sin^2\\theta\,\\dot{\\phi}^2\\right]\\\\
+                                              &=&\\frac{1}{2}\\left[-\\left(1-\\frac{2r}{\\Sigma}\\right)\\dot{t}^2-\\frac{4ar\\sin^2\\theta}{\\Sigma}\\dot{t}\\dot{\\phi}\\right.\\\\
+                                              & &\\left.+\\frac{\\Sigma}{\\Delta}\\dot{r}^2+\\frac{\\Sigma}{1}\\dot{\\theta}^2+\\left(r^2+a^2+\\frac{2a^2r\\sin^2\\theta}{\\Sigma}\\right)\\sin^2\\theta\,\\dot{\\phi}^2\\right]\\\\
         \\end{eqnarray}
+
+    .. math::
+        \\Sigma\\equiv r^2+a^2\\cos^2\\theta
+
+    .. math::
+        \\Delta\\equiv r^2-2r+a^2
 
     initial conditions are:
 
@@ -75,19 +81,19 @@ def initial(
         \\left\\{
         \\begin{eqnarray}
             p_t\\equiv\\frac{\\partial\\mathscr{L}}{\\partial\\dot{t}}&=&-E\\\\
-            p_r\\equiv\\frac{\\partial\\mathscr{L}}{\\partial\\dot{r}}&=&\\frac{\\rho^2}{\\Delta}\\dot{r}\\\\
-            p_\\theta\\equiv\\frac{\\partial\\mathscr{L}}{\\partial\\dot{\\theta}}&=&\\frac{\\rho^2}{1}\\dot{\\theta}\\\\
+            p_r\\equiv\\frac{\\partial\\mathscr{L}}{\\partial\\dot{r}}&=&\\frac{\\Sigma}{\\Delta}\\dot{r}\\\\
+            p_\\theta\\equiv\\frac{\\partial\\mathscr{L}}{\\partial\\dot{\\theta}}&=&\\frac{\\Sigma}{1}\\dot{\\theta}\\\\
             p_\\phi\\equiv\\frac{\\partial\\mathscr{L}}{\\partial\\dot{\\phi}}&=&+L_z\\\\
         \\end{eqnarray}
         \\right.
 
-    with:
+    where:
 
     .. math::
-        E=\\sqrt{\\frac{\\rho^2 -2r}{\\rho^2\\Delta}\\left(\\rho^2\\dot{r}^2+\\rho^2\\Delta\\dot{\\theta}^2+\\Delta\\mu\\right)+\\Delta\\sin^2\\theta\\,\\dot{\\phi}^2}
+        E=\\sqrt{\\frac{\\Sigma -2r}{\\Sigma\\Delta}\\left(\\Sigma\\dot{r}^2+\\Sigma\\Delta\\dot{\\theta}^2+\\Delta\\mu\\right)+\\Delta\\sin^2\\theta\\,\\dot{\\phi}^2}
 
     .. math::
-        L_z=\\left[\\frac{\\rho^2\\Delta\\dot{\\phi}-2arE}{\\rho^2-2r}\\right]\\sin^2\\theta
+        L_z=\\left[\\frac{\\Sigma\\Delta\\dot{\\phi}-2arE}{\\Sigma-2r}\\right]\\sin^2\\theta
 
     .. math::
         Q=p_\\theta^2+\\left[\\frac{L_z^2}{\\sin^2\\theta}+a^2(\\mu-E^2)\\right]\\cos^2\\theta
@@ -95,13 +101,7 @@ def initial(
     .. math::
         \\kappa=Q+L_z^2-a^2(\\mu-E^2)
 
-    where :math:`a\\equiv\\frac{L}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis, :math:`Q` the Carter constant and:
-
-    .. math::
-        \\rho^2\\equiv r^2+a^2\\cos^2\\theta
-
-    .. math::
-        \\Delta\\equiv r^2-2r+a^2
+    where :math:`a\\equiv\\frac{L}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis and :math:`Q` the Carter constant.
 
     In the black hole system coordinate, initial cartesian velocities :math:`(\\dot{x},\\dot{y},\\dot{z})` are determined by differentiating :func:`kerr.coord.obs_to_bh` along the photon arrival direction (= z direction):
 
@@ -125,11 +125,13 @@ def initial(
         \\end{eqnarray}
         \\right|_{\\text{subs. }(x,y,z)\\text{ and }(\\dot{x},\\dot{y},\\dot{z})}
 
+    This gives:
+
     .. math::
         \\left\\{
         \\begin{eqnarray}
-            \\dot{r}&=&-\\frac{r\\mathcal{R}\\sin\\theta\\sin\\theta_\\text{obs}\\cos\\Phi+\\mathcal{R}^2\\cos\\theta\\cos\\theta_\\text{obs}}{\\rho^2}\\\\
-            \\dot{\\theta}&=&+\\frac{r\\sin\\theta\\cos\\theta_\\text{obs}-\\mathcal{R}\\cos\\theta\\sin\\theta_\\text{obs}\\cos\\Phi}{\\rho^2}\\\\
+            \\dot{r}&=&-\\frac{r\\mathcal{R}\\sin\\theta\\sin\\theta_\\text{obs}\\cos\\Phi+\\mathcal{R}^2\\cos\\theta\\cos\\theta_\\text{obs}}{\\Sigma}\\\\
+            \\dot{\\theta}&=&+\\frac{r\\sin\\theta\\cos\\theta_\\text{obs}-\\mathcal{R}\\cos\\theta\\sin\\theta_\\text{obs}\\cos\\Phi}{\\Sigma}\\\\
             \\dot{\\phi}&=&\\frac{\\sin\\theta_\\text{obs}\\sin\\Phi}{\\mathcal{R}\\sin\\theta}\\\\
         \\end{eqnarray}
         \\right.
@@ -185,7 +187,7 @@ def initial(
 
     Δ = r2_bh - 2.0 * r_bh + a2
 
-    ρ2 = r2_bh + a2 * cos2θ_bh
+    Σ = r2_bh + a2 * cos2θ_bh
 
     ####################################################################################################################
     # INITIAL CONDITIONS - STEP 1                                                                                      #
@@ -193,9 +195,9 @@ def initial(
 
     zdot = -1.0
 
-    rdot_bh = zdot * (-r_bh * R1 * sinθ_bh * sinθ_obs * cosΦ - R2 * cosθ_bh * cosθ_obs) / ρ2
+    rdot_bh = zdot * (-r_bh * R1 * sinθ_bh * sinθ_obs * cosΦ - R2 * cosθ_bh * cosθ_obs) / Σ
 
-    θdot_bh = zdot * (+r_bh * sinθ_bh * cosθ_obs - R1 * cosθ_bh * sinθ_obs * cosΦ) / ρ2
+    θdot_bh = zdot * (+r_bh * sinθ_bh * cosθ_obs - R1 * cosθ_bh * sinθ_obs * cosΦ) / Σ
 
     ϕdot_bh = zdot * (sinθ_obs * sinΦ) / (R1 * sinθ_bh)
 
@@ -203,14 +205,14 @@ def initial(
     # INITIAL CONDITIONS - STEP 2                                                                                      #
     ####################################################################################################################
 
-    pr_bh = rdot_bh * ρ2 / (Δ)
-    pθ_bh = θdot_bh * ρ2 / 1.0
+    pr_bh = rdot_bh * Σ / (Δ)
+    pθ_bh = θdot_bh * Σ / 1.0
 
     ####################################################################################################################
 
-    E = np.sqrt((ρ2 - 2.0 * r_bh) * (ρ2 * rdot_bh * rdot_bh + ρ2 * Δ * θdot_bh * θdot_bh + Δ * µ) / (ρ2 * Δ) + Δ * sin2θ_bh * ϕdot_bh * ϕdot_bh)
+    E = np.sqrt((Σ - 2.0 * r_bh) * (Σ * rdot_bh * rdot_bh + Σ * Δ * θdot_bh * θdot_bh + Δ * µ) / (Σ * Δ) + Δ * sin2θ_bh * ϕdot_bh * ϕdot_bh)
 
-    L = (ρ2 * Δ * ϕdot_bh - 2.0 * a * r_bh * E) * sin2θ_bh / (ρ2 - 2.0 * r_bh)
+    L = (Σ * Δ * ϕdot_bh - 2.0 * a * r_bh * E) * sin2θ_bh / (Σ - 2.0 * r_bh)
 
     ####################################################################################################################
 
