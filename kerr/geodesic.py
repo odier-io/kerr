@@ -74,24 +74,24 @@ def geodesic(
     System of differential equations, in Boyer–Lindquist coordinates, for computing photon geodesics:
 
     .. math::
-        \\frac{dr}{dz}=p_r\\times\\frac{\\Delta}{\\rho^2}
+        \\frac{dr}{dz}=p_r\\times\\frac{\\Delta}{\\Sigma}
 
     .. math::
-        \\frac{d\\theta}{dz}=p_\\theta\\times\\frac{1}{\\rho^2}
+        \\frac{d\\theta}{dz}=p_\\theta\\times\\frac{1}{\\Sigma}
 
     .. math::
-        \\frac{d\\phi}{dz}=\\frac{2ar+(\\rho^2-2r)\\frac{L_z}{\\sin^2\\theta}}{\\rho^2\\Delta}
+        \\frac{d\\phi}{dz}=\\frac{2ar+(\\Sigma-2r)\\frac{L_z}{\\sin^2\\theta}}{\\Sigma\\Delta}
 
     .. math::
-        \\frac{dp_r}{dz}=\\frac{(-\\mathcal{R}^2\\mu-2\\Delta p_r^2-\\kappa)(r-1)+(2\\mathcal{R}^2-\\Delta\\mu)r-2aL_z}{\\rho^2\\Delta}
+        \\frac{dp_r}{dz}=\\frac{(-\\mathcal{R}^2\\mu-2\\Delta p_r^2-\\kappa)(r-1)+(2\\mathcal{R}^2-\\Delta\\mu)r-2aL_z}{\\Sigma\\Delta}
 
     .. math::
-        \\frac{dp_\\theta}{dz}=\\frac{\\sin\\theta\\cos\\theta}{\\rho^2}\\left[\\frac{L_z^2}{\\sin^4\\theta}+a^2(\\mu-1)\\right]
+        \\frac{dp_\\theta}{dz}=\\frac{\\sin\\theta\\cos\\theta}{\\Sigma}\\left[\\frac{L_z^2}{\\sin^4\\theta}+a^2(\\mu-1)\\right]
 
     Where :math:`a\\equiv\\frac{J}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis, :math:`C` the Carter constant and:
 
     .. math::
-        \\rho^2\\equiv r^2+a^2\\cos^2\\theta
+        \\Sigma\\equiv r^2+a^2\\cos^2\\theta
 
     .. math::
         \\Delta\\equiv r^2-2r+a^2

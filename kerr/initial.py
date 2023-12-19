@@ -101,7 +101,7 @@ def initial(
     .. math::
         \\kappa=Q+L_z^2-a^2(\\mu-E^2)
 
-    where :math:`a\\equiv\\frac{L}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis and :math:`Q` the Carter constant.
+    :math:`a\\equiv\\frac{L}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis and :math:`Q` the Carter constant.
 
     In the black hole system coordinate, initial cartesian velocities :math:`(\\dot{x},\\dot{y},\\dot{z})` are determined by differentiating :func:`kerr.coord.obs_to_bh` along the photon arrival direction (= z direction):
 
