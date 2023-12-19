@@ -10,3 +10,8 @@ help:
 
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+	rm -fr ../docs/
+	mv ./_build/html/ ../docs/
+
+	echo "include:\n  - _images\n  - _sources\n  - _static" > ../docs/_config.yml
