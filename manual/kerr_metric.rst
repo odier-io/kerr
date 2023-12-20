@@ -1,10 +1,10 @@
-Module kerr.initial
-===================
+Module kerr.metric
+==================
 
-Initial
--------
+Metric
+------
 
-.. automodule:: kerr.initial
+.. automodule:: kerr.metric
    :members:
 
 References

@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 ########################################################################################################################
 
-import math
 import typing
 
 import numpy as np
 import numba as nb
 
-########################################################################################################################
+from kerr.metric import geodesic
 
-TINY = 1.0e-30
+########################################################################################################################
 
 ONE_PI = 1.0 * np.pi
 TWO_PI = 2.0 * np.pi
@@ -57,118 +56,7 @@ POSITIVE_SHRINK = -0.25
 
 N_MAX_ITERS = 5_000
 
-########################################################################################################################
-
-# noinspection PyPep8Naming
-@nb.njit
-def geodesic(
-    out_dydx: np.ndarray,
-    y: np.ndarray,
-    a: float,
-    E: float,
-    L: float,
-    κ: float,
-    µ: float = 0.0
-) -> None:
-
-    """
-    System of differential equations for computing geodesics.
-
-    Parameters
-    ----------
-    out_dydx : np.ndarray
-        ???
-    y : np.ndarray
-        ???
-    a : float
-        The black hole spin :math:`\\in ]-1,+1[`.
-    E : float
-        ???
-    L : float
-        ???
-    κ : float
-        ???
-    µ : float
-        The rest mass (0 for massless particles, 1 otherwise).
-
-    Notes
-    -----
-
-    Equations are:
-
-    .. math::
-        \\dot{r}=p_r\\times\\frac{\\Delta}{\\Sigma}
-
-    .. math::
-        \\dot{\\theta}=p_\\theta\\times\\frac{1}{\\Sigma}
-
-    .. math::
-        \\dot{\\phi}=\\frac{2arE+(\\Sigma-2r)\\frac{L_z}{\\sin^2\\theta}}{\\Sigma\\Delta}
-
-    .. math::
-        \\dot{p_r}=\\frac{(-\\mathcal{R}^2\\mu-2\\Delta p_r^2-\\kappa)(r-1)+(2\\mathcal{R}^2E^2-\\Delta\\mu)r-2aEL_z}{\\Sigma\\Delta}
-
-    .. math::
-        \\dot{p_\\theta}=\\frac{\\sin\\theta\\cos\\theta}{\\Sigma}\\left[\\frac{L_z^2}{\\sin^4\\theta}+a^2(\\mu-E^2)\\right]
-
-    See definitions for :math:`a`, :math:`\\Sigma`, :math:`\\Delta`, :math:`\\mathcal{R}`, :math:`L_z`, :math:`C` and :math:`\\kappa` there: :func:`kerr.initial.initial` and :ref:`[1] <reference_1>`.
-    """
-
-    ####################################################################################################################
-
-    r = y[0]
-    θ = y[1]
-    # = y[2]
-    pr = y[3]
-    pθ = y[4]
-
-    a2 = a * a
-    r2 = r * r
-
-    E2 = E * E
-    L2 = L * L
-
-    R2 = r2 + a2
-
-    twor = 2.0 * r
-
-    ####################################################################################################################
-
-    sinθ = math.sin(θ)
-    cosθ = math.cos(θ)
-
-    sin2θ = sinθ * sinθ
-    cos2θ = cosθ * cosθ
-
-    sin4θ = sin2θ * sin2θ
-
-    if sinθ < 1.0e-8:
-        sinθ = 1.0e-8
-        sin2θ = 1.0e-16
-        sin4θ = 1.0e-32
-
-    ####################################################################################################################
-
-    Δ = r2 - twor + a2
-
-    ρ2 = r2 + a2 * cos2θ
-
-    if Δ < TINY:
-
-        Δ = TINY
-
-    ####################################################################################################################
-
-    # dr/dz
-    out_dydx[0] = pr * (Δ / ρ2)
-    # dθ/dz
-    out_dydx[1] = pθ * (1 / ρ2)
-    # dϕ/dz
-    out_dydx[2] = (2.0 * a * r * E + (ρ2 - twor) * L / sin2θ) / (ρ2 * Δ)
-    # dpr/dz
-    out_dydx[3] = ((R2 * µ + 2.0 * Δ * pr * pr + κ) * (1.0 - r) + (2.0 * R2 * E2 - Δ * µ) * r - 2.0 * a * E * L) / (ρ2 * Δ)
-    # dpθ/dz
-    out_dydx[4] = (sinθ * cosθ) * (L2 / sin4θ + a2 * (µ - E2)) / ρ2
+TINY = 1.0e-30
 
 ########################################################################################################################
 

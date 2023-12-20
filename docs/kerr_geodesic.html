@@ -15,7 +15,7 @@
 <link href="_static/custom.css?v=ea830958" rel="stylesheet" type="text/css"/>
 <link href="search.html" rel="search" title="Search"/>
 <link href="genindex.html" rel="index" title="Index"/>
-<link href="kerr_initial.html" rel="prev" title="Module kerr.initial"/>
+<link href="kerr_metric.html" rel="prev" title="Module kerr.metric"/>
 <script>
     <!-- Prevent Flash of wrong theme -->
       const userPreference = localStorage.getItem('darkMode');
@@ -75,7 +75,7 @@
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="kerr_coord.html">Module kerr.coord</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kerr_initial.html">Module kerr.initial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kerr_metric.html">Module kerr.metric</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Module kerr.geodesic</a></li>
 </ul>
 </nav>
@@ -103,51 +103,12 @@
 <h1>Module kerr.geodesic<a class="headerlink" href="#module-kerr-geodesic" title="Link to this heading">¶</a></h1>
 <section id="module-kerr.geodesic">
 <span id="geodesic"></span><h2>Geodesic<a class="headerlink" href="#module-kerr.geodesic" title="Link to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#module-kerr.geodesic'">¶</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="kerr.geodesic.geodesic">
-<span class="sig-prename descclassname"><span class="pre">kerr.geodesic.</span></span><span class="sig-name descname"><span class="pre">geodesic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dydx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">κ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">μ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kerr.geodesic.geodesic" title="Link to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#kerr.geodesic.geodesic'">¶</a></dt>
-<dd><p>System of differential equations for computing geodesics.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>out_dydx</strong><span class="classifier">np.ndarray</span></dt><dd><p>???</p>
-</dd>
-<dt><strong>y</strong><span class="classifier">np.ndarray</span></dt><dd><p>???</p>
-</dd>
-<dt><strong>a</strong><span class="classifier">float</span></dt><dd><p>The black hole spin <span class="math notranslate nohighlight">\(\in ]-1,+1[\)</span>.</p>
-</dd>
-<dt><strong>L</strong><span class="classifier">float</span></dt><dd><p>???</p>
-</dd>
-<dt><strong>κ</strong><span class="classifier">float</span></dt><dd><p>???</p>
-</dd>
-<dt><strong>µ</strong><span class="classifier">float</span></dt><dd><p>The rest mass (0 for massless particles, 1 otherwise).</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>Equations are:</p>
-<div class="math notranslate nohighlight">
-\[\dot{r}=p_r\times\frac{\Delta}{\Sigma}\]</div>
-<div class="math notranslate nohighlight">
-\[\dot{\theta}=p_\theta\times\frac{1}{\Sigma}\]</div>
-<div class="math notranslate nohighlight">
-\[\dot{\phi}=\frac{2arE+(\Sigma-2r)\frac{L_z}{\sin^2\theta}}{\Sigma\Delta}\]</div>
-<div class="math notranslate nohighlight">
-\[\dot{p_r}=\frac{(-\mathcal{R}^2\mu-2\Delta p_r^2-\kappa)(r-1)+(2\mathcal{R}^2E^2-\Delta\mu)r-2aEL_z}{\Sigma\Delta}\]</div>
-<div class="math notranslate nohighlight">
-\[\dot{p_\theta}=\frac{\sin\theta\cos\theta}{\Sigma}\left[\frac{L_z^2}{\sin^4\theta}+a^2(\mu-E^2)\right]\]</div>
-<p>See definitions for <span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(\Sigma\)</span>, <span class="math notranslate nohighlight">\(\Delta\)</span>, <span class="math notranslate nohighlight">\(\mathcal{R}\)</span>, <span class="math notranslate nohighlight">\(L_z\)</span>, <span class="math notranslate nohighlight">\(C\)</span> and <span class="math notranslate nohighlight">\(\kappa\)</span> there: <a class="reference internal" href="kerr_initial.html#kerr.initial.initial" title="kerr.initial.initial"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.initial.initial()</span></code></a> and <a class="reference internal" href="kerr_initial.html#reference-1"><span class="std std-ref">[1]</span></a>.</p>
-</dd></dl>
 </section>
 </section>
 </div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
 <div class="sticky top-16 -mt-10 max-h-[calc(var(--vh)-4rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
 <ul>
-<li><a :data-current="activeSection === '#module-kerr.geodesic'" class="reference internal" href="#module-kerr.geodesic">Geodesic</a><ul>
-<li><a :data-current="activeSection === '#kerr.geodesic.geodesic'" class="reference internal" href="#kerr.geodesic.geodesic"><code class="docutils literal notranslate"><span class="pre">geodesic()</span></code></a></li>
-</ul>
-</li>
+<li><a :data-current="activeSection === '#module-kerr.geodesic'" class="reference internal" href="#module-kerr.geodesic">Geodesic</a></li>
 </ul>
 </div>
 </aside>
@@ -165,7 +126,6 @@
 <script src="_static/doctools.js?v=888ff710"></script>
 <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
 <script defer="defer" src="_static/theme.js?v=e8bd915e"></script>
-<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-svg.min.js"></script>
 <script src="_static/custom.js?v=834f7b4e"></script>
 </body>
 </html>

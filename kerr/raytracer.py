@@ -12,7 +12,7 @@ import numba as nb
 
 from PIL import Image
 
-from kerr.initial import initial
+from kerr.metric import initial
 from kerr.geodesic import integrate
 from kerr.coord import boyer_lindquist_to_cartesian, bh_to_obs
 

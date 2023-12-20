@@ -1,7 +1,7 @@
 Kerr
 ====
 
-A toolbox for Kerr black holes calculation and visialization.
+A toolbox for Kerr black holes calculation and visualization.
 
 Indices and tables
 ==================
@@ -11,5 +11,5 @@ Indices and tables
    :caption: Contents:
 
    kerr_coord
-   kerr_initial
+   kerr_metric
    kerr_geodesic
