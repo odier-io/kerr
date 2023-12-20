@@ -158,7 +158,7 @@
     p_\phi\equiv\frac{\partial\mathscr{L}}{\partial\dot{\phi}}&amp;=&amp;+L_z\\
 \end{eqnarray}
 \right.\end{split}\]</div>
-<p>where:</p>
+<p>where (see <a class="reference internal" href="#reference-1"><span class="std std-ref">[1]</span></a>):</p>
 <div class="math notranslate nohighlight">
 \[E=\sqrt{\frac{\Sigma -2r}{\Sigma\Delta}\left(\Sigma\dot{r}^2+\Sigma\Delta\dot{\theta}^2+\Delta\mu\right)+\Delta\sin^2\theta\,\dot{\phi}^2}\]</div>
 <div class="math notranslate nohighlight">
@@ -167,7 +167,7 @@
 \[Q=p_\theta^2+\left[\frac{L_z^2}{\sin^2\theta}+a^2(\mu-E^2)\right]\cos^2\theta\]</div>
 <div class="math notranslate nohighlight">
 \[\kappa=Q+L_z^2-a^2(\mu-E^2)\]</div>
-<p><span class="math notranslate nohighlight">\(a\equiv\frac{L}{M}\)</span> is the Kerr parameter (conventionally, <span class="math notranslate nohighlight">\(M=1\)</span>), <span class="math notranslate nohighlight">\(L_z\)</span> is the projection of the particle angular momentum along the black hole spin axis and <span class="math notranslate nohighlight">\(Q\)</span> the Carter constant.</p>
+<p><span class="math notranslate nohighlight">\(a\equiv\frac{L}{M}\)</span> is the Kerr parameter (conventionally, <span class="math notranslate nohighlight">\(M=1\)</span>), <span class="math notranslate nohighlight">\(L_z\)</span> is the projection of the particle angular momentum along the black hole spin axis and <span class="math notranslate nohighlight">\(Q\)</span> the Carter constant and <span class="math notranslate nohighlight">\(\kappa\)</span> another constant that is always non-negative.</p>
 <p>In the black hole system coordinate, initial cartesian velocities <span class="math notranslate nohighlight">\((\dot{x},\dot{y},\dot{z})\)</span> are determined by differentiating <a class="reference internal" href="kerr_coord.html#kerr.coord.obs_to_bh" title="kerr.coord.obs_to_bh"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.obs_to_bh()</span></code></a> along the photon arrival direction (= z direction):</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\left\{
@@ -177,7 +177,7 @@
     \dot{z}&amp;=&amp;-\cos\theta_\text{obs}\\
 \end{eqnarray}
 \right.\end{split}\]</div>
-<p>Then, initial spherical velocities <span class="math notranslate nohighlight">\((\dot{r},\dot{\theta},\dot{\phi})\)</span> are determined by differentiating <span class="math notranslate nohighlight">\((r,\theta,\phi)\)</span> = <a class="reference internal" href="kerr_coord.html#kerr.coord.cartesian_to_boyer_lindquist" title="kerr.coord.cartesian_to_boyer_lindquist"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.cartesian_to_boyer_lindquist()</span></code></a> and substituting <span class="math notranslate nohighlight">\((x,y,z)\to\)</span> <a class="reference internal" href="kerr_coord.html#kerr.coord.boyer_lindquist_to_cartesian" title="kerr.coord.boyer_lindquist_to_cartesian"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.boyer_lindquist_to_cartesian()</span></code></a> and <span class="math notranslate nohighlight">\((\dot{x},\dot{y},\dot{z})\to\dotsb\)</span>:</p>
+<p>Then, initial spherical velocities <span class="math notranslate nohighlight">\((\dot{r},\dot{\theta},\dot{\phi})\)</span> are determined by differentiating <span class="math notranslate nohighlight">\((r,\theta,\phi)\)</span> = <a class="reference internal" href="kerr_coord.html#kerr.coord.cartesian_to_boyer_lindquist" title="kerr.coord.cartesian_to_boyer_lindquist"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.cartesian_to_boyer_lindquist()</span></code></a> and substituting <span class="math notranslate nohighlight">\((x,y,z)\to\)</span> <a class="reference internal" href="kerr_coord.html#kerr.coord.boyer_lindquist_to_cartesian" title="kerr.coord.boyer_lindquist_to_cartesian"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.boyer_lindquist_to_cartesian()</span></code></a> and <span class="math notranslate nohighlight">\((\dot{x},\dot{y},\dot{z})\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\left\{
 \begin{eqnarray}
@@ -198,6 +198,18 @@
 <p>where <span class="math notranslate nohighlight">\(\mathcal{R}\equiv\sqrt{r^2+a^2}\)</span> and <span class="math notranslate nohighlight">\(\Phi\equiv\phi-\phi_\text{obs}\)</span>.</p>
 </dd></dl>
 </section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#references'">¶</a></h2>
+<ol class="arabic" id="reference-1">
+<li><div class="line-block">
+<div class="line"><em>Radiation transfer of emission lines in curved space-time</em></div>
+<div class="line">S. V. Fuerst and K. Wu</div>
+<div class="line">Astronomy &amp; Astrophysics, vol. 424 (2004)
+(<a class="reference external" href="https://arxiv.org/abs/astro-ph/0406401">arXiv</a>)</div>
+</div>
+</li>
+</ol>
+</section>
 </section>
 </div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
 <div class="sticky top-16 -mt-10 max-h-[calc(var(--vh)-4rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
@@ -206,6 +218,7 @@
 <li><a :data-current="activeSection === '#kerr.initial.initial'" class="reference internal" href="#kerr.initial.initial"><code class="docutils literal notranslate"><span class="pre">initial()</span></code></a></li>
 </ul>
 </li>
+<li><a :data-current="activeSection === '#references'" class="reference internal" href="#references">References</a></li>
 </ul>
 </div>
 </aside>

@@ -87,7 +87,7 @@ def initial(
         \\end{eqnarray}
         \\right.
 
-    where:
+    where (see :ref:`[1] <reference_1>`):
 
     .. math::
         E=\\sqrt{\\frac{\\Sigma -2r}{\\Sigma\\Delta}\\left(\\Sigma\\dot{r}^2+\\Sigma\\Delta\\dot{\\theta}^2+\\Delta\\mu\\right)+\\Delta\\sin^2\\theta\\,\\dot{\\phi}^2}
@@ -101,7 +101,7 @@ def initial(
     .. math::
         \\kappa=Q+L_z^2-a^2(\\mu-E^2)
 
-    :math:`a\\equiv\\frac{L}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis and :math:`Q` the Carter constant.
+    :math:`a\\equiv\\frac{L}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis and :math:`Q` the Carter constant and :math:`\\kappa` another constant that is always non-negative.
 
     In the black hole system coordinate, initial cartesian velocities :math:`(\\dot{x},\\dot{y},\\dot{z})` are determined by differentiating :func:`kerr.coord.obs_to_bh` along the photon arrival direction (= z direction):
 
@@ -114,7 +114,7 @@ def initial(
         \\end{eqnarray}
         \\right.
 
-    Then, initial spherical velocities :math:`(\\dot{r},\\dot{\\theta},\\dot{\\phi})` are determined by differentiating :math:`(r,\\theta,\\phi)` = :func:`kerr.coord.cartesian_to_boyer_lindquist` and substituting :math:`(x,y,z)\\to` :func:`kerr.coord.boyer_lindquist_to_cartesian` and :math:`(\\dot{x},\\dot{y},\\dot{z})\\to\\dotsb`:
+    Then, initial spherical velocities :math:`(\\dot{r},\\dot{\\theta},\\dot{\\phi})` are determined by differentiating :math:`(r,\\theta,\\phi)` = :func:`kerr.coord.cartesian_to_boyer_lindquist` and substituting :math:`(x,y,z)\\to` :func:`kerr.coord.boyer_lindquist_to_cartesian` and :math:`(\\dot{x},\\dot{y},\\dot{z})`:
 
     .. math::
         \\left\\{
@@ -216,15 +216,10 @@ def initial(
 
     ####################################################################################################################
 
-    pr_bh /= E # For simplifying geodesic calculations
-    pθ_bh /= E # For simplifying geodesic calculations
-    L     /= E # For simplifying geodesic calculations
-
-    ####################################################################################################################
-
+    E2 = E * E
     L2 = L * L
 
-    a21mu = a2 * (µ - 1.0)
+    a21mu = a2 * (µ - E2)
 
     Q = pθ_bh * pθ_bh + (L2 / sin2θ_bh + a21mu) * cos2θ_bh
 

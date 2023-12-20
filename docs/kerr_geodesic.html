@@ -106,22 +106,38 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="kerr.geodesic.geodesic">
 <span class="sig-prename descclassname"><span class="pre">kerr.geodesic.</span></span><span class="sig-name descname"><span class="pre">geodesic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_dydx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">κ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">μ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kerr.geodesic.geodesic" title="Link to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#kerr.geodesic.geodesic'">¶</a></dt>
-<dd><p>System of differential equations, in Boyer–Lindquist coordinates, for computing photon geodesics:</p>
+<dd><p>System of differential equations for computing geodesics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>out_dydx</strong><span class="classifier">np.ndarray</span></dt><dd><p>???</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">np.ndarray</span></dt><dd><p>???</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">float</span></dt><dd><p>The black hole spin <span class="math notranslate nohighlight">\(\in ]-1,+1[\)</span>.</p>
+</dd>
+<dt><strong>L</strong><span class="classifier">float</span></dt><dd><p>???</p>
+</dd>
+<dt><strong>κ</strong><span class="classifier">float</span></dt><dd><p>???</p>
+</dd>
+<dt><strong>µ</strong><span class="classifier">float</span></dt><dd><p>The rest mass (0 for massless particles, 1 otherwise).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Equations are:</p>
 <div class="math notranslate nohighlight">
-\[\frac{dr}{dz}=p_r\times\frac{\Delta}{\Sigma}\]</div>
+\[\dot{r}=p_r\times\frac{\Delta}{\Sigma}\]</div>
 <div class="math notranslate nohighlight">
-\[\frac{d\theta}{dz}=p_\theta\times\frac{1}{\Sigma}\]</div>
+\[\dot{\theta}=p_\theta\times\frac{1}{\Sigma}\]</div>
 <div class="math notranslate nohighlight">
-\[\frac{d\phi}{dz}=\frac{2ar+(\Sigma-2r)\frac{L_z}{\sin^2\theta}}{\Sigma\Delta}\]</div>
+\[\dot{\phi}=\frac{2arE+(\Sigma-2r)\frac{L_z}{\sin^2\theta}}{\Sigma\Delta}\]</div>
 <div class="math notranslate nohighlight">
-\[\frac{dp_r}{dz}=\frac{(-\mathcal{R}^2\mu-2\Delta p_r^2-\kappa)(r-1)+(2\mathcal{R}^2-\Delta\mu)r-2aL_z}{\Sigma\Delta}\]</div>
+\[\dot{p_r}=\frac{(-\mathcal{R}^2\mu-2\Delta p_r^2-\kappa)(r-1)+(2\mathcal{R}^2E^2-\Delta\mu)r-2aEL_z}{\Sigma\Delta}\]</div>
 <div class="math notranslate nohighlight">
-\[\frac{dp_\theta}{dz}=\frac{\sin\theta\cos\theta}{\Sigma}\left[\frac{L_z^2}{\sin^4\theta}+a^2(\mu-1)\right]\]</div>
-<p>Where <span class="math notranslate nohighlight">\(a\equiv\frac{J}{M}\)</span> is the Kerr parameter (conventionally, <span class="math notranslate nohighlight">\(M=1\)</span>), <span class="math notranslate nohighlight">\(L_z\)</span> is the projection of the particle angular momentum along the black hole spin axis, <span class="math notranslate nohighlight">\(C\)</span> the Carter constant and:</p>
-<div class="math notranslate nohighlight">
-\[\Sigma\equiv r^2+a^2\cos^2\theta\]</div>
-<div class="math notranslate nohighlight">
-\[\Delta\equiv r^2-2r+a^2\]</div>
+\[\dot{p_\theta}=\frac{\sin\theta\cos\theta}{\Sigma}\left[\frac{L_z^2}{\sin^4\theta}+a^2(\mu-E^2)\right]\]</div>
+<p>See definitions for <span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(\Sigma\)</span>, <span class="math notranslate nohighlight">\(\Delta\)</span>, <span class="math notranslate nohighlight">\(\mathcal{R}\)</span>, <span class="math notranslate nohighlight">\(L_z\)</span>, <span class="math notranslate nohighlight">\(C\)</span> and <span class="math notranslate nohighlight">\(\kappa\)</span> there: <a class="reference internal" href="kerr_initial.html#kerr.initial.initial" title="kerr.initial.initial"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.initial.initial()</span></code></a> and <a class="reference internal" href="kerr_initial.html#reference-1"><span class="std std-ref">[1]</span></a>.</p>
 </dd></dl>
 </section>
 </section>

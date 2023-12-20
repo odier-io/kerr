@@ -26,12 +26,12 @@ def ray_tracer_step2(
     r_sky, θ_sky, ϕ_sky,
     steps,
     r, θ, ϕ, pr, pθ,
-    a, L, κ
+    a, E, L, κ
 ):
 
     for i in nb.prange(r.shape[0]):
 
-        var, steps[i] = integrate(r[i], θ[i], ϕ[i], pr[i], pθ[i], a, L[i], κ[i])
+        var, steps[i] = integrate(r[i], θ[i], ϕ[i], pr[i], pθ[i], a, E[i], L[i], κ[i])
 
         r_sky[i] = var[0]
         θ_sky[i] = var[1]
@@ -66,7 +66,7 @@ def ray_tracer(a: float, r_cam: float, θ_cam: float, ϕ_cam: float, size_x: int
 
     ####################################################################################################################
 
-    if False:
+    if True:
 
         plt.imshow(r.reshape(size_y, size_x))
         plt.title('r')
@@ -145,7 +145,7 @@ def ray_tracer(a: float, r_cam: float, θ_cam: float, ϕ_cam: float, size_x: int
         r_sky, θ_sky, ϕ_sky,
         steps,
         r, θ, ϕ, pr, pθ,
-        a, L, κ
+        a, E, L, κ
     )
 
     time1 = timeit.default_timer()
