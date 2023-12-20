@@ -180,20 +180,17 @@
 <p>Then, initial spherical velocities <span class="math notranslate nohighlight">\((\dot{r},\dot{\theta},\dot{\phi})\)</span> are determined by differentiating <span class="math notranslate nohighlight">\((r,\theta,\phi)\)</span> = <a class="reference internal" href="kerr_coord.html#kerr.coord.cartesian_to_boyer_lindquist" title="kerr.coord.cartesian_to_boyer_lindquist"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.cartesian_to_boyer_lindquist()</span></code></a> and substituting <span class="math notranslate nohighlight">\((x,y,z)\to\)</span> <a class="reference internal" href="kerr_coord.html#kerr.coord.boyer_lindquist_to_cartesian" title="kerr.coord.boyer_lindquist_to_cartesian"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.boyer_lindquist_to_cartesian()</span></code></a> and <span class="math notranslate nohighlight">\((\dot{x},\dot{y},\dot{z})\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\left\{
-\begin{eqnarray}
-    \dot{r}&amp;=&amp;\frac{\partial r}{\partial x}\dot{x}+\frac{\partial r}{\partial y}\dot{y}+\frac{\partial r}{\partial z}\dot{z}\\
-    \dot{\theta}&amp;=&amp;\frac{\partial\theta}{\partial x}\dot{x}+\frac{\partial\theta}{\partial y}\dot{y}+\frac{\partial\theta}{\partial z}\dot{z}\\
-    \dot{\phi}&amp;=&amp;\frac{\partial\phi}{\partial x}\dot{x}+\frac{\partial\phi}{\partial y}\dot{y}+\frac{\partial\phi}{\partial z}\dot{z}\\
-\end{eqnarray}
-\right|_{\text{subs. }(x,y,z)\text{ and }(\dot{x},\dot{y},\dot{z})}\end{split}\]</div>
-<p>This gives:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\left\{
-\begin{eqnarray}
-    \dot{r}&amp;=&amp;-\frac{r\mathcal{R}\sin\theta\sin\theta_\text{obs}\cos\Phi+\mathcal{R}^2\cos\theta\cos\theta_\text{obs}}{\Sigma}\\
-    \dot{\theta}&amp;=&amp;+\frac{r\sin\theta\cos\theta_\text{obs}-\mathcal{R}\cos\theta\sin\theta_\text{obs}\cos\Phi}{\Sigma}\\
-    \dot{\phi}&amp;=&amp;\frac{\sin\theta_\text{obs}\sin\Phi}{\mathcal{R}\sin\theta}\\
-\end{eqnarray}
+\begin{matrix}
+    \dot{r}=\frac{\partial r}{\partial x}\dot{x}+\frac{\partial r}{\partial y}\dot{y}+\frac{\partial r}{\partial z}\dot{z}\\
+    \dot{\theta}=\frac{\partial\theta}{\partial x}\dot{x}+\frac{\partial\theta}{\partial y}\dot{y}+\frac{\partial\theta}{\partial z}\dot{z}\\
+    \dot{\phi}=\frac{\partial\phi}{\partial x}\dot{x}+\frac{\partial\phi}{\partial y}\dot{y}+\frac{\partial\phi}{\partial z}\dot{z}\\
+\end{matrix}
+\right|_{\text{subs. }(x,y,z)\text{ and }(\dot{x},\dot{y},\dot{z})}=\left\{
+    \begin{matrix}
+        -\frac{r\mathcal{R}\sin\theta\sin\theta_\text{obs}\cos\Phi+\mathcal{R}^2\cos\theta\cos\theta_\text{obs}}{\Sigma}\\
+        +\frac{r\sin\theta\cos\theta_\text{obs}-\mathcal{R}\cos\theta\sin\theta_\text{obs}\cos\Phi}{\Sigma}\\
+        \frac{\sin\theta_\text{obs}\sin\Phi}{\mathcal{R}\sin\theta}\\
+    \end{matrix}
 \right.\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\mathcal{R}\equiv\sqrt{r^2+a^2}\)</span> and <span class="math notranslate nohighlight">\(\Phi\equiv\phi-\phi_\text{obs}\)</span>.</p>
 </dd></dl>

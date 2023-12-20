@@ -118,22 +118,17 @@ def initial(
 
     .. math::
         \\left\\{
-        \\begin{eqnarray}
-            \\dot{r}&=&\\frac{\\partial r}{\\partial x}\\dot{x}+\\frac{\\partial r}{\\partial y}\\dot{y}+\\frac{\\partial r}{\\partial z}\\dot{z}\\\\
-            \\dot{\\theta}&=&\\frac{\\partial\\theta}{\\partial x}\\dot{x}+\\frac{\\partial\\theta}{\\partial y}\\dot{y}+\\frac{\\partial\\theta}{\\partial z}\\dot{z}\\\\
-            \\dot{\\phi}&=&\\frac{\\partial\\phi}{\\partial x}\\dot{x}+\\frac{\\partial\\phi}{\\partial y}\\dot{y}+\\frac{\\partial\\phi}{\\partial z}\\dot{z}\\\\
-        \\end{eqnarray}
-        \\right|_{\\text{subs. }(x,y,z)\\text{ and }(\\dot{x},\\dot{y},\\dot{z})}
-
-    This gives:
-
-    .. math::
-        \\left\\{
-        \\begin{eqnarray}
-            \\dot{r}&=&-\\frac{r\\mathcal{R}\\sin\\theta\\sin\\theta_\\text{obs}\\cos\\Phi+\\mathcal{R}^2\\cos\\theta\\cos\\theta_\\text{obs}}{\\Sigma}\\\\
-            \\dot{\\theta}&=&+\\frac{r\\sin\\theta\\cos\\theta_\\text{obs}-\\mathcal{R}\\cos\\theta\\sin\\theta_\\text{obs}\\cos\\Phi}{\\Sigma}\\\\
-            \\dot{\\phi}&=&\\frac{\\sin\\theta_\\text{obs}\\sin\\Phi}{\\mathcal{R}\\sin\\theta}\\\\
-        \\end{eqnarray}
+        \\begin{matrix}
+            \\dot{r}=\\frac{\\partial r}{\\partial x}\\dot{x}+\\frac{\\partial r}{\\partial y}\\dot{y}+\\frac{\\partial r}{\\partial z}\\dot{z}\\\\
+            \\dot{\\theta}=\\frac{\\partial\\theta}{\\partial x}\\dot{x}+\\frac{\\partial\\theta}{\\partial y}\\dot{y}+\\frac{\\partial\\theta}{\\partial z}\\dot{z}\\\\
+            \\dot{\\phi}=\\frac{\\partial\\phi}{\\partial x}\\dot{x}+\\frac{\\partial\\phi}{\\partial y}\\dot{y}+\\frac{\\partial\\phi}{\\partial z}\\dot{z}\\\\
+        \\end{matrix}
+        \\right|_{\\text{subs. }(x,y,z)\\text{ and }(\\dot{x},\\dot{y},\\dot{z})}=\\left\\{
+            \\begin{matrix}
+                -\\frac{r\\mathcal{R}\\sin\\theta\\sin\\theta_\\text{obs}\\cos\\Phi+\\mathcal{R}^2\\cos\\theta\\cos\\theta_\\text{obs}}{\\Sigma}\\\\
+                +\\frac{r\\sin\\theta\\cos\\theta_\\text{obs}-\\mathcal{R}\\cos\\theta\\sin\\theta_\\text{obs}\\cos\\Phi}{\\Sigma}\\\\
+                \\frac{\\sin\\theta_\\text{obs}\\sin\\Phi}{\\mathcal{R}\\sin\\theta}\\\\
+            \\end{matrix}
         \\right.
 
     where :math:`\\mathcal{R}\\equiv\\sqrt{r^2+a^2}` and :math:`\\Phi\\equiv\\phi-\\phi_\\text{obs}`.
