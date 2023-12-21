@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ########################################################################################################################
 
-"""Kerr metric."""
+"""Kerr metric describing a black hole with a rest mass :math:`M=1` (and also :math:`G=c=1` for simplicity) and an angular momentum :math:`J`."""
 
 ########################################################################################################################
 
@@ -33,7 +33,7 @@ def initial(
 ]:
 
     """
-    Initial conditions of particles starting from the observer’s grid.
+    Initial conditions of particles starting from the observer's grid.
 
     Parameters
     ----------
@@ -51,12 +51,12 @@ def initial(
         The :math:`y` cartesian coordinate.
     z : np.ndarray
         The :math:`z` cartesian coordinate.
-    µ : float
+    µ : float, default: 0
         The rest mass (0 for massless particles, 1 otherwise).
 
     Returns
     -------
-        The initial condition tuple :math:`(r,\\theta,\\phi,p_r,p_\\theta,E,L,Q,\\kappa)`.
+    The initial condition tuple :math:`(r,\\theta,\\phi,p_r,p_\\theta,E,L,C,\\kappa)`.
 
     Notes
     -----
@@ -68,6 +68,9 @@ def initial(
                                               &=&\\frac{1}{2}\\left[-\\left(1-\\frac{2r}{\\Sigma}\\right)\\dot{t}^2-\\frac{4ar\\sin^2\\theta}{\\Sigma}\\dot{t}\\dot{\\phi}\\right.\\\\
                                               & &\\left.+\\frac{\\Sigma}{\\Delta}\\dot{r}^2+\\frac{\\Sigma}{1}\\dot{\\theta}^2+\\left(r^2+a^2+\\frac{2a^2r\\sin^2\\theta}{\\Sigma}\\right)\\sin^2\\theta\\,\\dot{\\phi}^2\\right]\\\\
         \\end{eqnarray}
+
+    .. math::
+        a\\equiv\\frac{J}{M}
 
     .. math::
         \\Sigma\\equiv r^2+a^2\\cos^2\\theta
@@ -87,7 +90,7 @@ def initial(
         \\end{eqnarray}
         \\right.
 
-    where (see :ref:`[1] <reference_1>`):
+    where (see [1]_):
 
     .. math::
         E=\\sqrt{\\frac{\\Sigma -2r}{\\Sigma\\Delta}\\left(\\Sigma\\dot{r}^2+\\Sigma\\Delta\\dot{\\theta}^2+\\Delta\\mu\\right)+\\Delta\\sin^2\\theta\\,\\dot{\\phi}^2}
@@ -96,12 +99,12 @@ def initial(
         L_z=\\left[\\frac{\\Sigma\\Delta\\dot{\\phi}-2arE}{\\Sigma-2r}\\right]\\sin^2\\theta
 
     .. math::
-        Q=p_\\theta^2+\\left[\\frac{L_z^2}{\\sin^2\\theta}+a^2(\\mu-E^2)\\right]\\cos^2\\theta
+        C=p_\\theta^2+\\left[\\frac{L_z^2}{\\sin^2\\theta}+a^2(\\mu-E^2)\\right]\\cos^2\\theta
 
     .. math::
-        \\kappa=Q+L_z^2-a^2(\\mu-E^2)
+        \\kappa=C+L_z^2-a^2(\\mu-E^2)
 
-    :math:`a\\equiv\\frac{L}{M}` is the Kerr parameter (conventionally, :math:`M=1`), :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis and :math:`Q` the Carter constant and :math:`\\kappa` another constant that is always non-negative.
+    :math:`L_z` is the projection of the particle angular momentum along the black hole spin axis, :math:`C` the Carter constant, conserved along each geodesic, and :math:`\\kappa` another constant that is always non-negative.
 
     In the black hole system coordinate, initial cartesian velocities :math:`(\\dot{x},\\dot{y},\\dot{z})` are determined by differentiating :func:`kerr.coord.obs_to_bh` along the photon arrival direction (= z direction):
 
@@ -114,7 +117,7 @@ def initial(
         \\end{eqnarray}
         \\right.
 
-    Then, initial spherical velocities :math:`(\\dot{r},\\dot{\\theta},\\dot{\\phi})` are determined by differentiating :math:`(r,\\theta,\\phi)` = :func:`kerr.coord.cartesian_to_boyer_lindquist` and substituting :math:`(x,y,z)\\to` :func:`kerr.coord.boyer_lindquist_to_cartesian` and :math:`(\\dot{x},\\dot{y},\\dot{z})`:
+    Then, initial spherical velocities :math:`(\\dot{r},\\dot{\\theta},\\dot{\\phi})` are determined by differentiating :math:`(r,\\theta,\\phi)` = :func:`kerr.coord.cartesian_to_boyer_lindquist` and by substituting for :math:`(x,y,z)\\to` :func:`kerr.coord.boyer_lindquist_to_cartesian` and :math:`(\\dot{x},\\dot{y},\\dot{z})`:
 
     .. math::
         \\left\\{
@@ -216,9 +219,9 @@ def initial(
 
     a21mu = a2 * (µ - E2)
 
-    Q = pθ_bh * pθ_bh + (L2 / sin2θ_bh + a21mu) * cos2θ_bh
+    C = pθ_bh * pθ_bh + (L2 / sin2θ_bh + a21mu) * cos2θ_bh
 
-    κ = Q + L2 - a21mu
+    κ = C + L2 - a21mu
 
     ####################################################################################################################
 
@@ -227,7 +230,7 @@ def initial(
         pr_bh, pθ_bh,
         #
         E, L,
-        Q, κ
+        C, κ
     )
 
 ########################################################################################################################
@@ -250,41 +253,36 @@ def geodesic(
     Parameters
     ----------
     out_dydz : np.ndarray
-        ???
+        ??? :math:`(\\dot{r},\\dot{\\theta},\\dot{\\phi},\\dot{p}_r,\\dot{p}_\\theta)`.
     y : np.ndarray
-        ???
+        ??? :math:`(r,\\theta,\\phi,p_r,p_\\theta)`.
     a : float
         The black hole spin :math:`\\in ]-1,+1[`.
     E : float
-        ???
+        Energy of the particle.
     L : float
-        ???
+        Angular momentum of the particle along the black hole spin axis.
     κ : float
-        ???
-    µ : float
+        Kappa constant of the particle: :math:`\\kappa=C+L_z^2-a^2(\\mu-E^2)`.
+    µ : float, default: 0
         The rest mass (0 for massless particles, 1 otherwise).
 
     Notes
     -----
-
-    Equations are:
-
-    .. math::
-        \\dot{r}=p_r\\times\\frac{\\Delta}{\\Sigma}
+    Geodesic equations are:
 
     .. math::
-        \\dot{\\theta}=p_\\theta\\times\\frac{1}{\\Sigma}
+        \\left\\{
+        \\begin{eqnarray}
+            \\dot{r}&=&\\frac{\\Delta}{\\Sigma}p_r\\\\
+            \\dot{\\theta}&=&\\frac{1}{\\Sigma}p_\\theta\\\\
+            \\dot{\\phi}&=&\\frac{2arE+(\\Sigma-2r)\\frac{L_z}{\\sin^2\\theta}}{\\Sigma\\Delta}\\\\
+            \\dot{p_r}&=&\\frac{(-\\mathcal{R}^2\\mu-2\\Delta p_r^2-\\kappa)(r-1)+(2\\mathcal{R}^2E^2-\\Delta\\mu)r-2aEL_z}{\\Sigma\\Delta}\\\\
+            \\dot{p_\\theta}&=&\\frac{\\sin\\theta\\cos\\theta}{\\Sigma}\\left[\\frac{L_z^2}{\\sin^4\\theta}+a^2(\\mu-E^2)\\right]\\\\
+        \\end{eqnarray}
+        \\right.
 
-    .. math::
-        \\dot{\\phi}=\\frac{2arE+(\\Sigma-2r)\\frac{L_z}{\\sin^2\\theta}}{\\Sigma\\Delta}
-
-    .. math::
-        \\dot{p_r}=\\frac{(-\\mathcal{R}^2\\mu-2\\Delta p_r^2-\\kappa)(r-1)+(2\\mathcal{R}^2E^2-\\Delta\\mu)r-2aEL_z}{\\Sigma\\Delta}
-
-    .. math::
-        \\dot{p_\\theta}=\\frac{\\sin\\theta\\cos\\theta}{\\Sigma}\\left[\\frac{L_z^2}{\\sin^4\\theta}+a^2(\\mu-E^2)\\right]
-
-    See definitions for :math:`a`, :math:`\\Sigma`, :math:`\\Delta`, :math:`\\mathcal{R}`, :math:`L_z`, :math:`C` and :math:`\\kappa` there: :func:`kerr.metric.initial` and :ref:`[1] <reference_1>`.
+    See definitions for :math:`a`, :math:`\\Sigma`, :math:`\\Delta`, :math:`\\mathcal{R}`, :math:`L_z`, :math:`C` and :math:`\\kappa` there: :func:`kerr.metric.initial` and [1]_.
     """
 
     ####################################################################################################################

@@ -12,7 +12,7 @@
 <meta content="Module kerr.metric | kerr 0.0.1 documentation" name="twitter:title"/>
 <link href="_static/pygments.css?v=8d216cef" rel="stylesheet" type="text/css"/>
 <link href="_static/theme.css?v=1c6a6288" rel="stylesheet" type="text/css"/>
-<link href="_static/custom.css?v=ea830958" rel="stylesheet" type="text/css"/>
+<link href="_static/custom.css?v=e30c7f1e" rel="stylesheet" type="text/css"/>
 <link href="search.html" rel="search" title="Search"/>
 <link href="genindex.html" rel="index" title="Index"/>
 <link href="kerr_geodesic.html" rel="next" title="Module kerr.geodesic"/>
@@ -104,7 +104,7 @@
 <h1>Module kerr.metric<a class="headerlink" href="#module-kerr-metric" title="Link to this heading">¶</a></h1>
 <section id="module-kerr.metric">
 <span id="metric"></span><h2>Metric<a class="headerlink" href="#module-kerr.metric" title="Link to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#module-kerr.metric'">¶</a></h2>
-<p>Kerr metric.</p>
+<p>Kerr metric describing a black hole with a rest mass <span class="math notranslate nohighlight">\(M=1\)</span> (and also <span class="math notranslate nohighlight">\(G=c=1\)</span> for simplicity) and an angular momentum <span class="math notranslate nohighlight">\(J\)</span>.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="kerr.metric.initial">
 <span class="sig-prename descclassname"><span class="pre">kerr.metric.</span></span><span class="sig-name descname"><span class="pre">initial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_obs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">θ_obs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">φ_obs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">μ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kerr.metric.initial" title="Link to this definition" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#kerr.metric.initial'">¶</a></dt>
@@ -126,13 +126,13 @@
 </dd>
 <dt><strong>z</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <span class="math notranslate nohighlight">\(z\)</span> cartesian coordinate.</p>
 </dd>
-<dt><strong>µ</strong><span class="classifier">float</span></dt><dd><p>The rest mass (0 for massless particles, 1 otherwise).</p>
+<dt><strong>µ</strong><span class="classifier">float, default: 0</span></dt><dd><p>The rest mass (0 for massless particles, 1 otherwise).</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>The initial condition tuple <span class="math notranslate nohighlight">\((r,\theta,\phi,p_r,p_\theta,E,L,Q,\kappa)\)</span>.</dt><dd></dd>
+<dt>The initial condition tuple <span class="math notranslate nohighlight">\((r,\theta,\phi,p_r,p_\theta,E,L,C,\kappa)\)</span>.</dt><dd></dd>
 </dl>
 </dd>
 </dl>
@@ -144,6 +144,8 @@
                                       &amp;=&amp;\frac{1}{2}\left[-\left(1-\frac{2r}{\Sigma}\right)\dot{t}^2-\frac{4ar\sin^2\theta}{\Sigma}\dot{t}\dot{\phi}\right.\\
                                       &amp; &amp;\left.+\frac{\Sigma}{\Delta}\dot{r}^2+\frac{\Sigma}{1}\dot{\theta}^2+\left(r^2+a^2+\frac{2a^2r\sin^2\theta}{\Sigma}\right)\sin^2\theta\,\dot{\phi}^2\right]\\
 \end{eqnarray}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[a\equiv\frac{J}{M}\]</div>
 <div class="math notranslate nohighlight">
 \[\Sigma\equiv r^2+a^2\cos^2\theta\]</div>
 <div class="math notranslate nohighlight">
@@ -158,16 +160,16 @@
     p_\phi\equiv\frac{\partial\mathscr{L}}{\partial\dot{\phi}}&amp;=&amp;+L_z\\
 \end{eqnarray}
 \right.\end{split}\]</div>
-<p>where (see <a class="reference internal" href="#reference-1"><span class="std std-ref">[1]</span></a>):</p>
+<p>where (see <a class="footnote-reference brackets" href="#id3" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>):</p>
 <div class="math notranslate nohighlight">
 \[E=\sqrt{\frac{\Sigma -2r}{\Sigma\Delta}\left(\Sigma\dot{r}^2+\Sigma\Delta\dot{\theta}^2+\Delta\mu\right)+\Delta\sin^2\theta\,\dot{\phi}^2}\]</div>
 <div class="math notranslate nohighlight">
 \[L_z=\left[\frac{\Sigma\Delta\dot{\phi}-2arE}{\Sigma-2r}\right]\sin^2\theta\]</div>
 <div class="math notranslate nohighlight">
-\[Q=p_\theta^2+\left[\frac{L_z^2}{\sin^2\theta}+a^2(\mu-E^2)\right]\cos^2\theta\]</div>
+\[C=p_\theta^2+\left[\frac{L_z^2}{\sin^2\theta}+a^2(\mu-E^2)\right]\cos^2\theta\]</div>
 <div class="math notranslate nohighlight">
-\[\kappa=Q+L_z^2-a^2(\mu-E^2)\]</div>
-<p><span class="math notranslate nohighlight">\(a\equiv\frac{L}{M}\)</span> is the Kerr parameter (conventionally, <span class="math notranslate nohighlight">\(M=1\)</span>), <span class="math notranslate nohighlight">\(L_z\)</span> is the projection of the particle angular momentum along the black hole spin axis and <span class="math notranslate nohighlight">\(Q\)</span> the Carter constant and <span class="math notranslate nohighlight">\(\kappa\)</span> another constant that is always non-negative.</p>
+\[\kappa=C+L_z^2-a^2(\mu-E^2)\]</div>
+<p><span class="math notranslate nohighlight">\(L_z\)</span> is the projection of the particle angular momentum along the black hole spin axis, <span class="math notranslate nohighlight">\(C\)</span> the Carter constant, conserved along each geodesic, and <span class="math notranslate nohighlight">\(\kappa\)</span> another constant that is always non-negative.</p>
 <p>In the black hole system coordinate, initial cartesian velocities <span class="math notranslate nohighlight">\((\dot{x},\dot{y},\dot{z})\)</span> are determined by differentiating <a class="reference internal" href="kerr_coord.html#kerr.coord.obs_to_bh" title="kerr.coord.obs_to_bh"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.obs_to_bh()</span></code></a> along the photon arrival direction (= z direction):</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\left\{
@@ -177,7 +179,7 @@
     \dot{z}&amp;=&amp;-\cos\theta_\text{obs}\\
 \end{eqnarray}
 \right.\end{split}\]</div>
-<p>Then, initial spherical velocities <span class="math notranslate nohighlight">\((\dot{r},\dot{\theta},\dot{\phi})\)</span> are determined by differentiating <span class="math notranslate nohighlight">\((r,\theta,\phi)\)</span> = <a class="reference internal" href="kerr_coord.html#kerr.coord.cartesian_to_boyer_lindquist" title="kerr.coord.cartesian_to_boyer_lindquist"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.cartesian_to_boyer_lindquist()</span></code></a> and substituting <span class="math notranslate nohighlight">\((x,y,z)\to\)</span> <a class="reference internal" href="kerr_coord.html#kerr.coord.boyer_lindquist_to_cartesian" title="kerr.coord.boyer_lindquist_to_cartesian"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.boyer_lindquist_to_cartesian()</span></code></a> and <span class="math notranslate nohighlight">\((\dot{x},\dot{y},\dot{z})\)</span>:</p>
+<p>Then, initial spherical velocities <span class="math notranslate nohighlight">\((\dot{r},\dot{\theta},\dot{\phi})\)</span> are determined by differentiating <span class="math notranslate nohighlight">\((r,\theta,\phi)\)</span> = <a class="reference internal" href="kerr_coord.html#kerr.coord.cartesian_to_boyer_lindquist" title="kerr.coord.cartesian_to_boyer_lindquist"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.cartesian_to_boyer_lindquist()</span></code></a> and by substituting for <span class="math notranslate nohighlight">\((x,y,z)\to\)</span> <a class="reference internal" href="kerr_coord.html#kerr.coord.boyer_lindquist_to_cartesian" title="kerr.coord.boyer_lindquist_to_cartesian"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.coord.boyer_lindquist_to_cartesian()</span></code></a> and <span class="math notranslate nohighlight">\((\dot{x},\dot{y},\dot{z})\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\left\{
 \begin{matrix}
@@ -201,49 +203,52 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>out_dydz</strong><span class="classifier">np.ndarray</span></dt><dd><p>???</p>
+<dt><strong>out_dydz</strong><span class="classifier">np.ndarray</span></dt><dd><p>??? <span class="math notranslate nohighlight">\((\dot{r},\dot{\theta},\dot{\phi},\dot{p}_r,\dot{p}_\theta)\)</span>.</p>
 </dd>
-<dt><strong>y</strong><span class="classifier">np.ndarray</span></dt><dd><p>???</p>
+<dt><strong>y</strong><span class="classifier">np.ndarray</span></dt><dd><p>??? <span class="math notranslate nohighlight">\((r,\theta,\phi,p_r,p_\theta)\)</span>.</p>
 </dd>
 <dt><strong>a</strong><span class="classifier">float</span></dt><dd><p>The black hole spin <span class="math notranslate nohighlight">\(\in ]-1,+1[\)</span>.</p>
 </dd>
-<dt><strong>E</strong><span class="classifier">float</span></dt><dd><p>???</p>
+<dt><strong>E</strong><span class="classifier">float</span></dt><dd><p>Energy of the particle.</p>
 </dd>
-<dt><strong>L</strong><span class="classifier">float</span></dt><dd><p>???</p>
+<dt><strong>L</strong><span class="classifier">float</span></dt><dd><p>Angular momentum of the particle along the black hole spin axis.</p>
 </dd>
-<dt><strong>κ</strong><span class="classifier">float</span></dt><dd><p>???</p>
+<dt><strong>κ</strong><span class="classifier">float</span></dt><dd><p>Kappa constant of the particle: <span class="math notranslate nohighlight">\(\kappa=C+L_z^2-a^2(\mu-E^2)\)</span>.</p>
 </dd>
-<dt><strong>µ</strong><span class="classifier">float</span></dt><dd><p>The rest mass (0 for massless particles, 1 otherwise).</p>
+<dt><strong>µ</strong><span class="classifier">float, default: 0</span></dt><dd><p>The rest mass (0 for massless particles, 1 otherwise).</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Equations are:</p>
+<p>Geodesic equations are:</p>
 <div class="math notranslate nohighlight">
-\[\dot{r}=p_r\times\frac{\Delta}{\Sigma}\]</div>
-<div class="math notranslate nohighlight">
-\[\dot{\theta}=p_\theta\times\frac{1}{\Sigma}\]</div>
-<div class="math notranslate nohighlight">
-\[\dot{\phi}=\frac{2arE+(\Sigma-2r)\frac{L_z}{\sin^2\theta}}{\Sigma\Delta}\]</div>
-<div class="math notranslate nohighlight">
-\[\dot{p_r}=\frac{(-\mathcal{R}^2\mu-2\Delta p_r^2-\kappa)(r-1)+(2\mathcal{R}^2E^2-\Delta\mu)r-2aEL_z}{\Sigma\Delta}\]</div>
-<div class="math notranslate nohighlight">
-\[\dot{p_\theta}=\frac{\sin\theta\cos\theta}{\Sigma}\left[\frac{L_z^2}{\sin^4\theta}+a^2(\mu-E^2)\right]\]</div>
-<p>See definitions for <span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(\Sigma\)</span>, <span class="math notranslate nohighlight">\(\Delta\)</span>, <span class="math notranslate nohighlight">\(\mathcal{R}\)</span>, <span class="math notranslate nohighlight">\(L_z\)</span>, <span class="math notranslate nohighlight">\(C\)</span> and <span class="math notranslate nohighlight">\(\kappa\)</span> there: <a class="reference internal" href="#kerr.metric.initial" title="kerr.metric.initial"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.metric.initial()</span></code></a> and <a class="reference internal" href="#reference-1"><span class="std std-ref">[1]</span></a>.</p>
+\[\begin{split}\left\{
+\begin{eqnarray}
+    \dot{r}&amp;=&amp;\frac{\Delta}{\Sigma}p_r\\
+    \dot{\theta}&amp;=&amp;\frac{1}{\Sigma}p_\theta\\
+    \dot{\phi}&amp;=&amp;\frac{2arE+(\Sigma-2r)\frac{L_z}{\sin^2\theta}}{\Sigma\Delta}\\
+    \dot{p_r}&amp;=&amp;\frac{(-\mathcal{R}^2\mu-2\Delta p_r^2-\kappa)(r-1)+(2\mathcal{R}^2E^2-\Delta\mu)r-2aEL_z}{\Sigma\Delta}\\
+    \dot{p_\theta}&amp;=&amp;\frac{\sin\theta\cos\theta}{\Sigma}\left[\frac{L_z^2}{\sin^4\theta}+a^2(\mu-E^2)\right]\\
+\end{eqnarray}
+\right.\end{split}\]</div>
+<p>See definitions for <span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(\Sigma\)</span>, <span class="math notranslate nohighlight">\(\Delta\)</span>, <span class="math notranslate nohighlight">\(\mathcal{R}\)</span>, <span class="math notranslate nohighlight">\(L_z\)</span>, <span class="math notranslate nohighlight">\(C\)</span> and <span class="math notranslate nohighlight">\(\kappa\)</span> there: <a class="reference internal" href="#kerr.metric.initial" title="kerr.metric.initial"><code class="xref py py-func docutils literal notranslate"><span class="pre">kerr.metric.initial()</span></code></a> and <a class="footnote-reference brackets" href="#id3" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 </dd></dl>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#references'">¶</a></h2>
-<ol class="arabic" id="reference-1">
-<li><div class="line-block">
-<div class="line"><em>Radiation transfer of emission lines in curved space-time</em></div>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id3" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a href="#id1" role="doc-backlink">1</a>,<a href="#id2" role="doc-backlink">2</a>)</span>
+<div class="line-block">
+<div class="line"><em>Radiation transfer of emission lines in curved space-time.</em></div>
 <div class="line">S. V. Fuerst and K. Wu</div>
 <div class="line">Astronomy &amp; Astrophysics, vol. 424 (2004)
 (<a class="reference external" href="https://arxiv.org/abs/astro-ph/0406401">arXiv</a>)</div>
 </div>
-</li>
-</ol>
+</aside>
+</aside>
 </section>
 </section>
 </div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
